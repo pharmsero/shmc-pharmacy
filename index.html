@@ -11,682 +11,527 @@
   --amber:#e6940a;--amber-lt:#fff8e6;--red:#c0392b;--red-lt:#fdecea;
   --green:#1a7a4a;--green-lt:#e8f7ee;--purple:#6b3fa0;--purple-lt:#f3eeff;
   --grey1:#f4f6f9;--grey2:#e8ecf1;--grey3:#c9d0db;--grey4:#8a94a6;--grey5:#3d4a5c;
-  --white:#fff;--text:#1a2332;
-  --sidebar:220px;
+  --white:#fff;--text:#1a2332;--sidebar:224px;
 }
 *{box-sizing:border-box;margin:0;padding:0;}
-body{font-family:'Segoe UI',Arial,sans-serif;font-size:14px;color:var(--text);background:var(--grey1);display:flex;min-height:100vh;}
-
-/* ── SIDEBAR ── */
+body{font-family:'Segoe UI',Arial,sans-serif;font-size:14px;color:var(--text);background:var(--grey1);}
+/* AUTH */
+#auth-screen{display:flex;align-items:center;justify-content:center;min-height:100vh;background:linear-gradient(135deg,var(--navy) 0%,var(--teal) 100%);padding:20px;}
+#auth-screen.hidden{display:none;}
+.auth-card{background:var(--white);border-radius:14px;padding:36px 32px;max-width:430px;width:100%;box-shadow:0 20px 60px rgba(0,0,0,.3);}
+.auth-card .brand{text-align:center;margin-bottom:22px;}
+.auth-card .brand .logo{font-size:42px;margin-bottom:8px;}
+.auth-card .brand h2{font-size:17px;font-weight:800;color:var(--navy);}
+.auth-card .brand p{font-size:11px;color:var(--grey4);margin-top:3px;}
+.auth-tabs{display:flex;background:var(--grey1);border-radius:8px;padding:4px;margin-bottom:22px;}
+.auth-tabs button{flex:1;padding:8px;border:none;background:transparent;border-radius:6px;font-size:13px;font-weight:600;cursor:pointer;color:var(--grey4);transition:all .2s;}
+.auth-tabs button.active{background:var(--white);color:var(--navy);box-shadow:0 1px 4px rgba(0,0,0,.12);}
+.auth-form{display:none;}
+.auth-form.active{display:block;}
+.af-group{margin-bottom:13px;}
+.af-group label{display:block;font-size:11px;font-weight:700;color:var(--grey5);margin-bottom:5px;text-transform:uppercase;letter-spacing:.4px;}
+.af-group input,.af-group select{width:100%;padding:10px 12px;border:1.5px solid var(--grey3);border-radius:7px;font-size:13px;color:var(--text);transition:border .15s;}
+.af-group input:focus,.af-group select:focus{outline:none;border-color:var(--teal);box-shadow:0 0 0 3px rgba(26,107,114,.1);}
+.auth-btn{width:100%;padding:11px;background:var(--teal);color:#fff;border:none;border-radius:7px;font-size:14px;font-weight:700;cursor:pointer;margin-top:4px;transition:background .15s;}
+.auth-btn:hover{background:#14565c;}
+.auth-msg{font-size:12px;text-align:center;margin-top:10px;padding:8px 10px;border-radius:6px;}
+.auth-msg.error{background:var(--red-lt);color:var(--red);}
+.auth-msg.success{background:var(--green-lt);color:var(--green);}
+.auth-msg.warning{background:var(--amber-lt);color:#7a5c00;}
+/* PENDING */
+#pending-screen{display:none;align-items:center;justify-content:center;min-height:100vh;background:linear-gradient(135deg,var(--navy),var(--teal));padding:20px;}
+#pending-screen.show{display:flex;}
+.pending-card{background:var(--white);border-radius:14px;padding:40px 32px;max-width:440px;width:100%;text-align:center;box-shadow:0 20px 60px rgba(0,0,0,.3);}
+.pending-card .icon{font-size:56px;margin-bottom:16px;}
+.pending-card h2{font-size:20px;font-weight:800;color:var(--navy);margin-bottom:8px;}
+.pending-card p{font-size:13px;color:var(--grey4);line-height:1.6;}
+.pending-card .back-btn{margin-top:20px;padding:9px 20px;background:var(--grey2);border:none;border-radius:7px;font-size:13px;font-weight:600;cursor:pointer;color:var(--grey5);}
+/* APP */
+#app-screen{display:none;min-height:100vh;}
+#app-screen.show{display:flex;}
+/* SIDEBAR */
 #sidebar{width:var(--sidebar);background:var(--navy);color:#cfe0ff;display:flex;flex-direction:column;position:fixed;top:0;left:0;height:100vh;overflow-y:auto;z-index:100;}
-#sidebar .brand{padding:18px 14px 10px;border-bottom:1px solid #1e3a6e;}
-#sidebar .brand h2{font-size:12px;font-weight:700;color:#fff;text-transform:uppercase;letter-spacing:.5px;line-height:1.4;}
+#sidebar .brand{padding:15px 14px 9px;border-bottom:1px solid #1e3a6e;}
+#sidebar .brand h2{font-size:11px;font-weight:700;color:#fff;text-transform:uppercase;letter-spacing:.5px;line-height:1.4;}
 #sidebar .brand small{font-size:10px;color:#7fa8d4;display:block;margin-top:2px;}
-#sidebar .clock{padding:6px 14px 10px;font-size:11px;color:#7fa8d4;border-bottom:1px solid #1e3a6e;}
+#sidebar .clock{padding:5px 14px 8px;font-size:11px;color:#7fa8d4;border-bottom:1px solid #1e3a6e;}
 #sidebar .clock span{color:#a8d4f7;font-weight:700;}
-
-/* Role switcher */
-#sidebar .role-section{padding:8px 14px;border-bottom:1px solid #1e3a6e;}
-#sidebar .role-section label{font-size:10px;text-transform:uppercase;letter-spacing:.5px;color:#7fa8d4;display:block;margin-bottom:4px;}
-#sidebar .role-section select{width:100%;background:#0d2e57;color:#cfe0ff;border:1px solid #2a4a7f;border-radius:4px;padding:5px 8px;font-size:12px;cursor:pointer;}
-
-/* Dept buttons */
+#sidebar .user-info{padding:8px 14px;border-bottom:1px solid #1e3a6e;font-size:11px;}
+#sidebar .user-info .uname{color:#fff;font-weight:700;}
+#sidebar .user-info .urole{color:#7fa8d4;margin-top:1px;}
+#sidebar .user-info .logout-lnk{color:#f97b7b;cursor:pointer;font-size:10px;margin-top:4px;display:inline-block;}
 #sidebar .dept-section{padding:8px 14px 4px;border-bottom:1px solid #1e3a6e;}
-#sidebar .dept-section label{font-size:10px;text-transform:uppercase;letter-spacing:.5px;color:#7fa8d4;display:block;margin-bottom:6px;}
-#sidebar .dept-btns{display:flex;flex-wrap:wrap;gap:4px;}
-#sidebar .dept-btns button{font-size:10px;padding:3px 7px;border-radius:3px;border:1px solid #2a4a7f;background:transparent;color:#a8c8f0;cursor:pointer;transition:all .15s;}
-#sidebar .dept-btns button:hover,#sidebar .dept-btns button.active{background:#1a6b72;border-color:#1a6b72;color:#fff;}
-
-/* Nav */
+#sidebar .dept-section label{font-size:10px;text-transform:uppercase;letter-spacing:.5px;color:#7fa8d4;display:block;margin-bottom:5px;}
+.dept-btns{display:flex;flex-wrap:wrap;gap:4px;}
+.dept-btns button{font-size:10px;padding:3px 7px;border-radius:3px;border:1px solid #2a4a7f;background:transparent;color:#a8c8f0;cursor:pointer;transition:all .15s;}
+.dept-btns button:hover,.dept-btns button.active{background:#1a6b72;border-color:#1a6b72;color:#fff;}
 #sidebar nav{flex:1;padding:8px 0;}
 #sidebar nav .nav-group{padding:6px 14px 2px;font-size:10px;text-transform:uppercase;letter-spacing:.5px;color:#4a6a9a;}
 #sidebar nav a{display:flex;align-items:center;gap:8px;padding:8px 14px;color:#b8d0f0;text-decoration:none;font-size:13px;cursor:pointer;transition:background .15s;}
 #sidebar nav a:hover{background:#1e3a6e;color:#fff;}
 #sidebar nav a.active{background:var(--teal);color:#fff;}
-#sidebar nav a .badge{margin-left:auto;background:var(--red);color:#fff;font-size:10px;padding:1px 6px;border-radius:9px;}
-
-/* ── MAIN ── */
-#main{margin-left:var(--sidebar);flex:1;display:flex;flex-direction:column;}
+#sidebar nav a .nbadge{margin-left:auto;background:var(--red);color:#fff;font-size:10px;padding:1px 6px;border-radius:9px;}
+/* MAIN */
+#main{margin-left:var(--sidebar);flex:1;display:flex;flex-direction:column;min-height:100vh;}
 #topbar{background:var(--white);border-bottom:1px solid var(--grey2);padding:10px 24px;display:flex;align-items:center;gap:12px;position:sticky;top:0;z-index:50;}
 #topbar h1{font-size:15px;font-weight:700;color:var(--navy);flex:1;}
-#topbar .role-badge{background:var(--teal-lt);color:var(--teal);border:1px solid var(--teal);border-radius:12px;padding:3px 10px;font-size:11px;font-weight:700;}
-#topbar .live-dot{width:8px;height:8px;background:#22c55e;border-radius:50%;animation:blink 1.5s infinite;}
+.role-badge-top{background:var(--teal-lt);color:var(--teal);border:1px solid var(--teal);border-radius:12px;padding:3px 10px;font-size:11px;font-weight:700;}
+.live-dot{width:8px;height:8px;background:#22c55e;border-radius:50%;animation:blink 1.5s infinite;}
 @keyframes blink{0%,100%{opacity:1;}50%{opacity:.3;}}
-
-/* HOD Warning Banner */
-#hod-banner{background:linear-gradient(135deg,#fff3cd,#ffeaa7);border-left:4px solid var(--amber);padding:10px 24px;font-size:12px;color:#7a5c00;display:flex;align-items:center;gap:8px;}
-#hod-banner.hidden{display:none;}
-
+/* HOD ALERT BAR */
+#hod-notif-bar{background:linear-gradient(90deg,#f3eeff,#ede0ff);border-bottom:3px solid var(--purple);padding:9px 24px;font-size:12px;color:var(--purple);display:none;align-items:center;gap:10px;cursor:pointer;}
+#hod-notif-bar.show{display:flex;}
+.notif-count{background:var(--purple);color:#fff;border-radius:50%;width:22px;height:22px;display:inline-flex;align-items:center;justify-content:center;font-size:11px;font-weight:800;}
+/* CONTENT */
 #content{padding:24px;flex:1;}
 .section{display:none;}
 .section.active{display:block;}
-
-/* ── CARDS ── */
+/* STATS */
 .stat-grid{display:grid;grid-template-columns:repeat(5,1fr);gap:12px;margin-bottom:20px;}
 .stat-card{background:var(--white);border-radius:8px;padding:14px 16px;border-left:4px solid var(--grey3);}
-.stat-card.red{border-color:var(--red);}
-.stat-card.amber{border-color:var(--amber);}
-.stat-card.green{border-color:var(--green);}
-.stat-card.purple{border-color:var(--purple);}
-.stat-card.blue{border-color:var(--teal);}
+.stat-card.red{border-color:var(--red);} .stat-card.amber{border-color:var(--amber);} .stat-card.green{border-color:var(--green);} .stat-card.purple{border-color:var(--purple);} .stat-card.blue{border-color:var(--teal);}
 .stat-card .val{font-size:28px;font-weight:800;color:var(--navy);}
 .stat-card .lbl{font-size:11px;color:var(--grey4);margin-top:2px;}
-.stat-card .sub{font-size:10px;color:var(--grey4);}
-
-/* ── PANEL / TABLE ── */
+/* PANELS */
 .panel{background:var(--white);border-radius:8px;padding:18px;margin-bottom:16px;box-shadow:0 1px 3px rgba(0,0,0,.06);}
 .panel-header{display:flex;align-items:center;gap:10px;margin-bottom:14px;flex-wrap:wrap;}
 .panel-header h3{font-size:14px;font-weight:700;color:var(--navy);flex:1;}
 .panel-title{font-size:16px;font-weight:700;color:var(--navy);margin-bottom:4px;}
 .panel-sub{font-size:12px;color:var(--grey4);margin-bottom:16px;}
-
+/* TABLES */
 table{width:100%;border-collapse:collapse;font-size:12px;}
 th{background:var(--grey1);padding:8px 10px;text-align:left;font-weight:700;color:var(--grey5);border-bottom:2px solid var(--grey2);}
 td{padding:8px 10px;border-bottom:1px solid var(--grey2);vertical-align:middle;}
 tr:hover td{background:#f8faff;}
-tr.row-red td{background:var(--red-lt)!important;}
-tr.row-amber td{background:var(--amber-lt)!important;}
-tr.row-green td{background:var(--green-lt)!important;}
-tr.row-purple td{background:var(--purple-lt)!important;}
-
-/* ── BUTTONS ── */
-.btn{display:inline-flex;align-items:center;gap:5px;padding:6px 14px;border-radius:5px;font-size:12px;font-weight:600;cursor:pointer;border:none;transition:all .15s;text-decoration:none;}
-.btn-primary{background:var(--teal);color:#fff;}
-.btn-primary:hover{background:#14565c;}
-.btn-secondary{background:var(--grey2);color:var(--grey5);}
-.btn-secondary:hover{background:var(--grey3);}
-.btn-danger{background:var(--red);color:#fff;}
-.btn-danger:hover{background:#a93226;}
-.btn-amber{background:var(--amber);color:#fff;}
-.btn-amber:hover{background:#c47d08;}
-.btn-navy{background:var(--navy);color:#fff;}
-.btn-navy:hover{background:#07192e;}
-.btn-green{background:var(--green);color:#fff;}
-.btn-green:hover{background:#155f38;}
+tr.row-red td{background:var(--red-lt)!important;} tr.row-amber td{background:var(--amber-lt)!important;} tr.row-green td{background:var(--green-lt)!important;} tr.row-purple td{background:var(--purple-lt)!important;}
+/* BUTTONS */
+.btn{display:inline-flex;align-items:center;gap:5px;padding:6px 14px;border-radius:5px;font-size:12px;font-weight:600;cursor:pointer;border:none;transition:all .15s;}
+.btn-primary{background:var(--teal);color:#fff;} .btn-primary:hover{background:#14565c;}
+.btn-secondary{background:var(--grey2);color:var(--grey5);} .btn-secondary:hover{background:var(--grey3);}
+.btn-danger{background:var(--red);color:#fff;} .btn-danger:hover{background:#a93226;}
+.btn-amber{background:var(--amber);color:#fff;} .btn-amber:hover{background:#c47d08;}
+.btn-green{background:var(--green);color:#fff;} .btn-green:hover{background:#155f38;}
+.btn-navy{background:var(--navy);color:#fff;} .btn-navy:hover{background:#07192e;}
+.btn-hod{background:linear-gradient(135deg,#6b3fa0,#8b55c4);color:#fff;} .btn-hod:hover{background:linear-gradient(135deg,#5a3388,#7544b0);}
 .btn-sm{padding:4px 10px;font-size:11px;}
-.btn-hod{background:linear-gradient(135deg,#6b3fa0,#8b55c4);color:#fff;}
-.btn-hod:hover{background:linear-gradient(135deg,#5a3388,#7544b0);}
-
-/* ── BADGE / STATUS ── */
+/* BADGES */
 .badge{display:inline-block;padding:2px 8px;border-radius:10px;font-size:10px;font-weight:700;text-transform:uppercase;}
-.badge-green{background:var(--green-lt);color:var(--green);}
-.badge-amber{background:var(--amber-lt);color:#a06308;}
-.badge-red{background:var(--red-lt);color:var(--red);}
-.badge-purple{background:var(--purple-lt);color:var(--purple);}
-.badge-blue{background:var(--teal-lt);color:var(--teal);}
-.badge-grey{background:var(--grey2);color:var(--grey5);}
-
-/* ── FORMS ── */
+.badge-green{background:var(--green-lt);color:var(--green);} .badge-amber{background:var(--amber-lt);color:#a06308;} .badge-red{background:var(--red-lt);color:var(--red);} .badge-purple{background:var(--purple-lt);color:var(--purple);} .badge-blue{background:var(--teal-lt);color:var(--teal);} .badge-grey{background:var(--grey2);color:var(--grey5);}
+/* FORMS */
 .form-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:12px;margin-bottom:12px;}
 .form-group{display:flex;flex-direction:column;gap:4px;}
 .form-group label{font-size:11px;font-weight:700;color:var(--grey5);}
 .form-group input,.form-group select,.form-group textarea{padding:7px 10px;border:1px solid var(--grey3);border-radius:5px;font-size:13px;color:var(--text);background:var(--white);width:100%;}
 .form-group input:focus,.form-group select:focus,.form-group textarea:focus{outline:none;border-color:var(--teal);box-shadow:0 0 0 2px rgba(26,107,114,.1);}
 .form-group textarea{min-height:60px;resize:vertical;}
-
-/* ── DRUG ITEMS TABLE in forms ── */
-.drug-items-table{width:100%;border-collapse:collapse;font-size:12px;margin-bottom:8px;}
-.drug-items-table th{background:var(--grey1);padding:6px 8px;font-weight:700;color:var(--grey5);border:1px solid var(--grey2);}
-.drug-items-table td{padding:5px 6px;border:1px solid var(--grey2);}
-.drug-items-table input,.drug-items-table select{padding:4px 6px;border:1px solid var(--grey3);border-radius:3px;font-size:12px;width:100%;}
-
-/* ── WORKFLOW STEPS ── */
-.workflow{display:flex;align-items:center;gap:0;margin:12px 0;flex-wrap:wrap;}
-.wf-step{display:flex;flex-direction:column;align-items:center;gap:3px;}
-.wf-step .icon{width:36px;height:36px;border-radius:50%;background:var(--grey2);display:flex;align-items:center;justify-content:center;font-size:16px;}
-.wf-step .icon.done{background:var(--green-lt);}
-.wf-step .icon.active-step{background:var(--teal-lt);}
-.wf-step .icon.hod-step{background:var(--purple-lt);}
-.wf-step span{font-size:10px;color:var(--grey4);text-align:center;max-width:70px;}
-.wf-arrow{padding:0 6px;color:var(--grey3);font-size:18px;margin-top:-14px;}
-
-/* ── UPLOAD ZONE ── */
+/* DRUG TABLE */
+.dit{width:100%;border-collapse:collapse;font-size:12px;margin-bottom:8px;}
+.dit th{background:var(--grey1);padding:6px 8px;font-weight:700;color:var(--grey5);border:1px solid var(--grey2);}
+.dit td{padding:5px 6px;border:1px solid var(--grey2);}
+.dit input,.dit select{padding:4px 6px;border:1px solid var(--grey3);border-radius:3px;font-size:12px;width:100%;}
+/* ENTRY MODE TABS */
+.em-tabs{display:flex;background:var(--grey1);border-radius:8px;padding:4px;margin-bottom:14px;max-width:360px;}
+.em-tabs button{flex:1;padding:7px 10px;border:none;background:transparent;border-radius:5px;font-size:12px;font-weight:600;cursor:pointer;color:var(--grey4);transition:all .2s;}
+.em-tabs button.active{background:var(--white);color:var(--navy);box-shadow:0 1px 4px rgba(0,0,0,.12);}
+.entry-panel{display:none;}
+.entry-panel.active{display:block;}
+/* UPLOAD ZONE */
 .upload-zone{border:2px dashed var(--grey3);border-radius:8px;padding:24px;text-align:center;cursor:pointer;transition:all .2s;background:var(--grey1);}
 .upload-zone:hover,.upload-zone.drag-over{border-color:var(--teal);background:var(--teal-lt);}
-.upload-zone .icon{font-size:36px;margin-bottom:8px;}
+.upload-zone .uz-icon{font-size:36px;margin-bottom:8px;}
 .upload-zone p{font-size:12px;color:var(--grey4);}
 .upload-zone strong{color:var(--teal);}
-
-/* ── HOD APPROVAL ZONE ── */
-.hod-approval-zone{border:2px solid var(--purple);border-radius:8px;padding:16px;background:var(--purple-lt);margin-top:16px;}
-.hod-approval-zone h4{color:var(--purple);font-size:13px;font-weight:700;margin-bottom:10px;display:flex;align-items:center;gap:6px;}
-.hod-lock{opacity:.45;pointer-events:none;filter:grayscale(.6);}
-.hod-lock-msg{background:var(--amber-lt);border:1px solid var(--amber);border-radius:6px;padding:8px 12px;font-size:12px;color:#7a5c00;margin-top:8px;display:flex;align-items:center;gap:6px;}
-
-/* ── MODAL ── */
+/* HOD ZONE */
+.hod-zone{border:2px solid var(--purple);border-radius:8px;padding:16px;background:var(--purple-lt);margin-top:16px;}
+.hod-zone h4{color:var(--purple);font-size:13px;font-weight:700;margin-bottom:10px;display:flex;align-items:center;gap:6px;}
+.lock-msg{background:var(--amber-lt);border:1px solid var(--amber);border-radius:6px;padding:8px 12px;font-size:12px;color:#7a5c00;display:flex;align-items:center;gap:6px;}
+.blocked-msg{background:var(--red-lt);border:1px solid var(--red);border-radius:6px;padding:8px 12px;font-size:12px;color:var(--red);display:flex;align-items:center;gap:6px;margin-top:10px;}
+/* WORKFLOW */
+.workflow{display:flex;align-items:center;gap:0;margin:12px 0;flex-wrap:wrap;}
+.wf-step{display:flex;flex-direction:column;align-items:center;gap:3px;}
+.wf-step .wi{width:36px;height:36px;border-radius:50%;background:var(--grey2);display:flex;align-items:center;justify-content:center;font-size:16px;}
+.wf-step .wi.done{background:var(--green-lt);} .wf-step .wi.hod{background:var(--purple-lt);}
+.wf-step span{font-size:10px;color:var(--grey4);text-align:center;max-width:70px;}
+.wf-arrow{padding:0 5px;color:var(--grey3);font-size:18px;margin-top:-14px;}
+/* MODAL */
 .modal-overlay{position:fixed;inset:0;background:rgba(0,0,0,.5);z-index:200;display:flex;align-items:center;justify-content:center;padding:20px;}
 .modal-overlay.hidden{display:none;}
-.modal{background:var(--white);border-radius:10px;max-width:700px;width:100%;max-height:90vh;overflow-y:auto;box-shadow:0 10px 40px rgba(0,0,0,.2);}
-.modal-header{padding:16px 20px;border-bottom:1px solid var(--grey2);display:flex;align-items:center;gap:10px;}
+.modal{background:var(--white);border-radius:10px;max-width:720px;width:100%;max-height:90vh;overflow-y:auto;box-shadow:0 10px 40px rgba(0,0,0,.2);}
+.modal-header{padding:16px 20px;border-bottom:1px solid var(--grey2);display:flex;align-items:center;gap:10px;position:sticky;top:0;background:var(--white);z-index:10;}
 .modal-header h3{flex:1;font-size:15px;font-weight:700;color:var(--navy);}
 .modal-close{background:none;border:none;font-size:20px;cursor:pointer;color:var(--grey4);padding:2px 6px;border-radius:4px;}
 .modal-close:hover{background:var(--grey2);}
 .modal-body{padding:20px;}
 .modal-footer{padding:14px 20px;border-top:1px solid var(--grey2);display:flex;gap:8px;justify-content:flex-end;}
-
-/* ── ALERT / TOAST ── */
+/* TOAST */
 .toast-container{position:fixed;top:16px;right:16px;z-index:999;display:flex;flex-direction:column;gap:8px;}
 .toast{background:var(--white);border-radius:8px;padding:12px 16px;box-shadow:0 4px 16px rgba(0,0,0,.15);display:flex;align-items:center;gap:10px;max-width:320px;font-size:13px;animation:slideIn .3s ease;}
-.toast.success{border-left:4px solid var(--green);}
-.toast.error{border-left:4px solid var(--red);}
-.toast.info{border-left:4px solid var(--teal);}
-.toast.warning{border-left:4px solid var(--amber);}
+.toast.success{border-left:4px solid var(--green);} .toast.error{border-left:4px solid var(--red);} .toast.info{border-left:4px solid var(--teal);} .toast.warning{border-left:4px solid var(--amber);} .toast.hod{border-left:4px solid var(--purple);}
 @keyframes slideIn{from{transform:translateX(100%);opacity:0;}to{transform:translateX(0);opacity:1;}}
-
-/* ── ALERTS LIST ── */
+/* ALERTS */
 .alert-item{display:flex;align-items:center;gap:10px;padding:10px 14px;border-radius:6px;margin-bottom:8px;}
 .alert-item.red{background:var(--red-lt);border-left:4px solid var(--red);}
 .alert-item.amber{background:var(--amber-lt);border-left:4px solid var(--amber);}
-.alert-item .alert-text{flex:1;font-size:13px;}
-.alert-item .alert-time{font-size:10px;color:var(--grey4);}
-
-/* ── AUDIT ROW ── */
+.alert-item.green{background:var(--green-lt);border-left:4px solid var(--green);}
+.alert-item .alt{flex:1;font-size:13px;} .alert-item .atm{font-size:10px;color:var(--grey4);}
+/* AUDIT */
 .audit-row{padding:8px 10px;border-bottom:1px solid var(--grey2);font-size:12px;display:flex;gap:12px;align-items:center;}
-.audit-row .audit-time{color:var(--grey4);min-width:130px;}
-.audit-row .audit-user{min-width:90px;font-weight:700;}
-.audit-row .audit-action{flex:1;}
-
-/* FILTERS */
+.audit-row .atm{color:var(--grey4);min-width:130px;} .audit-row .aus{min-width:120px;font-weight:700;} .audit-row .aac{flex:1;}
 .filters{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:12px;}
 .filters select,.filters input{padding:6px 10px;border:1px solid var(--grey3);border-radius:5px;font-size:12px;background:var(--white);}
-
-/* ── PUSH APPROVAL SECTION ── */
-.push-approval-row{background:var(--purple-lt);border:1px solid var(--purple);border-radius:6px;padding:10px 14px;margin-top:10px;}
-
-/* Responsive */
-@media(max-width:900px){
-  :root{--sidebar:200px;}
-  .stat-grid{grid-template-columns:repeat(2,1fr);}
-}
-@media(max-width:600px){
-  #sidebar{width:100%;position:relative;height:auto;}
-  #main{margin-left:0;}
-  .stat-grid{grid-template-columns:1fr 1fr;}
-}
+/* ADMIN */
+.user-row-pending td{background:var(--amber-lt)!important;} .user-row-approved td{background:var(--green-lt)!important;} .user-row-rejected td{background:var(--red-lt)!important;}
+/* INFO BOX */
+.info-box{background:var(--teal-lt);border-left:3px solid var(--teal);padding:10px 14px;border-radius:5px;font-size:12px;margin-bottom:14px;}
+.warn-box{background:var(--amber-lt);border-left:3px solid var(--amber);padding:10px 14px;border-radius:5px;font-size:12px;margin-bottom:14px;}
+@media(max-width:900px){:root{--sidebar:200px;}.stat-grid{grid-template-columns:repeat(2,1fr);}}
 </style>
 </head>
 <body>
 
-<!-- SIDEBAR -->
-<div id="sidebar">
-  <div class="brand">
-    <h2>🏛️ State House Medical Centre</h2>
-    <small>Pharmacy Bulk Store · IMS v3</small>
-    <small>Aso Rock Presidential Villa, Abuja</small>
-  </div>
-  <div class="clock">🟢 LIVE &nbsp;<span id="clock">--:--:--</span></div>
-
-  <div class="role-section">
-    <label>Current Role</label>
-    <select id="roleSelect" onchange="switchRole(this.value)">
-      <option value="ad_stores">AD, Stores</option>
-      <option value="hod_pharmacy">HOD Pharmacy</option>
-      <option value="dep_director">Dep. Director</option>
-      <option value="director">Director</option>
-      <option value="cmac">CMAC</option>
-      <option value="perm_sec">Perm. Secretary</option>
-    </select>
-  </div>
-
-  <div class="dept-section">
-    <label>Department View</label>
-    <div class="dept-btns">
-      <button class="active" onclick="filterDept('all')">All</button>
-      <button onclick="filterDept('GOPD Pharmacy')">GOPD</button>
-      <button onclick="filterDept('A&E')">A&amp;E</button>
-      <button onclick="filterDept('Presidential Wing')">PW</button>
-      <button onclick="filterDept('Theatre')">Theatre</button>
-      <button onclick="filterDept('Medical Ward')">Med Ward</button>
-      <button onclick="filterDept('Maternity Ward')">Maternity</button>
+<!-- AUTH SCREEN -->
+<div id="auth-screen">
+  <div class="auth-card">
+    <div class="brand"><div class="logo">🏛️</div><h2>State House Medical Centre</h2><p>Pharmacy Bulk Store · IMS v3 · Aso Rock, Abuja</p></div>
+    <div class="auth-tabs">
+      <button class="active" onclick="switchAuthTab('login')">Sign In</button>
+      <button onclick="switchAuthTab('signup')">Sign Up</button>
+    </div>
+    <div class="auth-form active" id="auth-login">
+      <div class="af-group"><label>Email Address</label><input type="email" id="login-email" placeholder="you@example.com"/></div>
+      <div class="af-group"><label>Password</label><input type="password" id="login-pass" placeholder="Your password"/></div>
+      <button class="auth-btn" onclick="doLogin()">Sign In →</button>
+      <div id="login-msg" class="auth-msg" style="display:none;"></div>
+    </div>
+    <div class="auth-form" id="auth-signup">
+      <div class="af-group"><label>Full Name</label><input type="text" id="su-name" placeholder="e.g. Adaeze Okonkwo"/></div>
+      <div class="af-group"><label>Email Address</label><input type="email" id="su-email" placeholder="you@example.com"/></div>
+      <div class="af-group"><label>Phone Number</label><input type="tel" id="su-phone" placeholder="+234…"/></div>
+      <div class="af-group"><label>Role Requested</label>
+        <select id="su-role">
+          <option value="">Select your role…</option>
+          <option value="ad_stores">AD, Stores</option>
+          <option value="hod_pharmacy">HOD Pharmacy</option>
+          <option value="dep_director">Dep. Director of Pharmacy</option>
+          <option value="director">Director of Pharmacy</option>
+          <option value="cmac">CMAC</option>
+          <option value="perm_sec">Permanent Secretary</option>
+        </select>
+      </div>
+      <div class="af-group"><label>Password</label><input type="password" id="su-pass" placeholder="Min. 6 characters"/></div>
+      <div class="af-group"><label>Confirm Password</label><input type="password" id="su-confirm" placeholder="Repeat password"/></div>
+      <button class="auth-btn" onclick="doSignup()">Request Access →</button>
+      <div id="signup-msg" class="auth-msg" style="display:none;"></div>
     </div>
   </div>
-
-  <nav>
-    <div class="nav-group">Overview</div>
-    <a onclick="showSection('dashboard')" class="active">📊 Dashboard</a>
-    <a onclick="showSection('inventory')">💊 Drug Inventory</a>
-
-    <div class="nav-group">Issuance</div>
-    <a onclick="showSection('push')">📤 Issue Drugs (Push)</a>
-    <a onclick="showSection('pull')">📥 Requisitions (Pull)</a>
-    <a onclick="showSection('siv')">🧾 SIV Register</a>
-
-    <div class="nav-group">Stock</div>
-    <a onclick="showSection('receive')">📦 Receive Stock</a>
-    <a onclick="showSection('import')">📊 Import Excel/Word</a>
-    <a onclick="showSection('expired')">☠️ Expired Drug Reg.</a>
-
-    <div class="nav-group">Management</div>
-    <a onclick="showSection('procurement')">📋 Procurement Req.</a>
-    <a onclick="showSection('reports')">📈 Reports &amp; Analytics</a>
-    <a onclick="showSection('alerts')">🔔 Alerts <span class="badge" id="alertBadge">0</span></a>
-    <a onclick="showSection('settings')">⚙️ Settings / Buffer</a>
-    <a onclick="showSection('audit')">🔄 Audit Trail</a>
-  </nav>
 </div>
 
-<!-- MAIN -->
-<div id="main">
-  <div id="topbar">
-    <h1>State House Medical Centre · Pharmacy Bulk Store IMS v3</h1>
-    <span class="live-dot"></span>
-    <span class="role-badge" id="roleBadgeTop">Role: AD, Stores</span>
+<!-- PENDING SCREEN -->
+<div id="pending-screen">
+  <div class="pending-card">
+    <div class="icon">⏳</div>
+    <h2>Account Pending Approval</h2>
+    <p>Your sign-up request has been submitted successfully.<br><br>The system administrator (<strong>pharmsero@gmail.com</strong>) will review and approve your account. You will be able to sign in once approved.</p>
+    <button class="back-btn" onclick="doLogout()">← Back to Sign In</button>
   </div>
+</div>
 
-  <!-- HOD Warning Banner -->
-  <div id="hod-banner" class="hidden">
-    ⚠️ <strong>You are logged in as HOD Pharmacy.</strong> You have authority to approve or reject drug requisitions (Push &amp; Pull).
-  </div>
-  <div id="ad-banner">
-    ℹ️ <strong>Logged in as AD, Stores.</strong> Drug requisition <strong>approval requires HOD Pharmacy</strong> login. You can create, review and modify requisitions.
-  </div>
-
-  <div id="content">
-
-    <!-- ══════════════ DASHBOARD ══════════════ -->
-    <div id="sec-dashboard" class="section active">
-      <div class="panel-title">📊 Dashboard</div>
-      <div class="panel-sub">Real-time overview</div>
-
-      <div class="stat-grid">
-        <div class="stat-card green"><div class="val" id="d-total">0</div><div class="lbl">Drug Lines Active</div><div class="sub">in store</div></div>
-        <div class="stat-card red"><div class="val" id="d-critical">0</div><div class="lbl">Critical / Zero</div><div class="sub">immediate action</div></div>
-        <div class="stat-card amber"><div class="val" id="d-buffer">0</div><div class="lbl">At Buffer Level</div><div class="sub">order soon</div></div>
-        <div class="stat-card purple"><div class="val" id="d-expired">0</div><div class="lbl">Expired / Near Expiry</div><div class="sub">review needed</div></div>
-        <div class="stat-card blue"><div class="val" id="d-pending">0</div><div class="lbl">Pending Requisitions</div><div class="sub">awaiting action</div></div>
-      </div>
-
-      <div style="display:grid;grid-template-columns:1fr 1fr;gap:16px;">
-        <div class="panel">
-          <div class="panel-header"><h3>🚨 Critical Stock</h3><button class="btn btn-secondary btn-sm" onclick="showSection('inventory')">View All</button></div>
-          <div id="dash-critical"></div>
-        </div>
-        <div class="panel">
-          <div class="panel-header"><h3>📥 Pending Reqs.</h3><button class="btn btn-secondary btn-sm" onclick="showSection('pull')">All</button></div>
-          <div id="dash-pending-reqs"></div>
-        </div>
-      </div>
-
-      <div class="panel">
-        <div class="panel-header"><h3>🕐 Recent Activity</h3></div>
-        <div id="dash-recent"></div>
+<!-- APP SCREEN -->
+<div id="app-screen">
+  <div id="sidebar">
+    <div class="brand"><h2>🏛️ State House Medical Centre</h2><small>Pharmacy Bulk Store · IMS v3</small><small>Aso Rock Presidential Villa, Abuja</small></div>
+    <div class="clock">🟢 LIVE &nbsp;<span id="clock">--:--:--</span></div>
+    <div class="user-info"><div class="uname" id="sb-name">—</div><div class="urole" id="sb-role">—</div><span class="logout-lnk" onclick="doLogout()">Sign out ↗</span></div>
+    <div class="dept-section"><label>Department View</label>
+      <div class="dept-btns">
+        <button class="active" onclick="filterDept(this,'all')">All</button>
+        <button onclick="filterDept(this,'GOPD')">GOPD</button>
+        <button onclick="filterDept(this,'A&amp;E')">A&amp;E</button>
+        <button onclick="filterDept(this,'PW')">PW</button>
+        <button onclick="filterDept(this,'Theatre')">Theatre</button>
+        <button onclick="filterDept(this,'Ward')">Wards</button>
       </div>
     </div>
+    <nav>
+      <div class="nav-group">Overview</div>
+      <a onclick="showSection('dashboard')" class="active">📊 Dashboard</a>
+      <a onclick="showSection('inventory')">💊 Drug Inventory</a>
+      <div class="nav-group">Issuance</div>
+      <a onclick="showSection('push')">📤 Issue Drugs (Push)</a>
+      <a onclick="showSection('pull')">📥 Requisitions (Pull)</a>
+      <a onclick="showSection('siv')">🧾 SIV Register</a>
+      <div class="nav-group">Stock</div>
+      <a onclick="showSection('receive')">📦 Receive Stock</a>
+      <a onclick="showSection('expired')">☠️ Expired Drug Reg.</a>
+      <div class="nav-group">Management</div>
+      <a onclick="showSection('procurement')">📋 Procurement Req.</a>
+      <a onclick="showSection('reports')">📈 Reports</a>
+      <a onclick="showSection('alerts')">🔔 Alerts <span class="nbadge" id="alertBadge">0</span></a>
+      <a onclick="showSection('admin')" id="nav-admin" style="display:none;">👑 Admin Panel</a>
+      <a onclick="showSection('audit')">🔄 Audit Trail</a>
+    </nav>
+  </div>
 
-    <!-- ══════════════ INVENTORY ══════════════ -->
-    <div id="sec-inventory" class="section">
-      <div class="panel">
-        <div class="panel-header">
-          <h3>💊 Drug Inventory</h3>
-          <button class="btn btn-secondary btn-sm" onclick="printTable('inv-table')">🖨 Print</button>
-          <button class="btn btn-secondary btn-sm" onclick="exportCSV()">⬇ CSV</button>
-          <button class="btn btn-primary btn-sm" onclick="openModal('modal-add-drug')">+ Add Drug</button>
-        </div>
-        <div class="filters">
-          <select id="inv-filter-status" onchange="renderInventory()"><option value="">All Status</option><option>In Stock</option><option>At Buffer</option><option>Critical/Zero</option><option>Expired</option></select>
-          <select id="inv-filter-source" onchange="renderInventory()"><option value="">All Sources</option><option>Contract</option><option>Stop Gap</option><option>Emergency</option><option>Regular</option></select>
-          <input type="text" id="inv-search" placeholder="Search drug…" oninput="renderInventory()"/>
-        </div>
-        <table id="inv-table">
-          <thead><tr><th>Drug Name</th><th>Source</th><th>Pack Size</th><th>Qty on Hand</th><th>Total Qty</th><th>Buffer Qty</th><th>Expiry</th><th>Status</th><th>Action</th></tr></thead>
-          <tbody id="inv-body"></tbody>
-        </table>
-      </div>
+  <div id="main">
+    <div id="topbar">
+      <h1>State House Medical Centre · Pharmacy Bulk Store IMS v3</h1>
+      <span class="live-dot"></span>
+      <span class="role-badge-top" id="roleBadgeTop">—</span>
+    </div>
+    <div id="hod-notif-bar" onclick="showSection('pull')">
+      🔔 &nbsp;<strong>HOD PHARMACY:</strong>&nbsp; You have &nbsp;<span class="notif-count" id="hod-pending-count">0</span>&nbsp; requisition(s) awaiting your approval — <strong>Click to review →</strong>
     </div>
 
-    <!-- ══════════════ PUSH (Issue Drugs) ══════════════ -->
-    <div id="sec-push" class="section">
-      <div class="panel-title">📤 Issue Drugs — PUSH</div>
-      <div class="panel-sub">Store-initiated dispatch · SIV auto-generated · <strong>HOD Pharmacy approval required before SIV is posted</strong></div>
+    <div id="content">
 
-      <!-- Upload Requisition for Push -->
-      <div class="panel">
-        <div class="panel-header">
-          <h3>📎 Upload Push Requisition Document</h3>
-          <span class="badge badge-blue">Optional — Pre-fill from file</span>
+      <!-- DASHBOARD -->
+      <div id="sec-dashboard" class="section active">
+        <div class="panel-title">📊 Dashboard</div>
+        <div class="panel-sub" id="dash-greeting">Welcome!</div>
+        <div class="stat-grid">
+          <div class="stat-card green"><div class="val" id="d-total">0</div><div class="lbl">Drug Lines Active</div></div>
+          <div class="stat-card red"><div class="val" id="d-critical">0</div><div class="lbl">Critical / Zero</div></div>
+          <div class="stat-card amber"><div class="val" id="d-buffer">0</div><div class="lbl">At Buffer Level</div></div>
+          <div class="stat-card purple"><div class="val" id="d-expired">0</div><div class="lbl">Expired</div></div>
+          <div class="stat-card blue"><div class="val" id="d-pending">0</div><div class="lbl">Pending HOD Approval</div></div>
         </div>
-        <p style="font-size:12px;color:var(--grey4);margin-bottom:12px;">Upload an Excel (.xlsx/.csv) or Word (.docx) requisition table to pre-fill the issuance form below. Columns: Drug Name | Quantity | Pack Size | Justification</p>
-        <div class="upload-zone" id="push-upload-zone" onclick="document.getElementById('push-file-input').click()">
-          <div class="icon">📋</div>
-          <p><strong>Click or drag &amp; drop</strong> requisition file</p>
-          <p>Excel (.xlsx/.csv) or Word (.docx) accepted</p>
+        <div style="display:grid;grid-template-columns:1fr 1fr;gap:16px;">
+          <div class="panel"><div class="panel-header"><h3>🚨 Critical Stock</h3><button class="btn btn-secondary btn-sm" onclick="showSection('inventory')">View All</button></div><div id="dash-critical"></div></div>
+          <div class="panel"><div class="panel-header"><h3>🔐 Pending HOD Approvals</h3><button class="btn btn-secondary btn-sm" onclick="showSection('pull')">Review</button></div><div id="dash-pending-reqs"></div></div>
         </div>
-        <input type="file" id="push-file-input" accept=".xlsx,.xls,.csv,.docx" style="display:none" onchange="handlePushUpload(this)"/>
-        <div id="push-upload-result" style="margin-top:8px;"></div>
+        <div class="panel"><div class="panel-header"><h3>🕐 Recent Activity</h3></div><div id="dash-recent"></div></div>
       </div>
 
-      <div class="panel">
-        <div class="panel-header"><h3>Store Issuance Voucher</h3><span class="badge badge-blue" id="push-siv-no">SIV/Drugs/——</span></div>
-
-        <div class="form-grid">
-          <div class="form-group">
-            <label>Destination Department</label>
-            <select id="push-dept">
-              <option value="">Select…</option>
-              <option>GOPD Pharmacy</option><option>Accident &amp; Emergency</option>
-              <option>Presidential Wing</option><option>Theatre</option>
-              <option>Medical Ward</option><option>Surgical Ward</option>
-              <option>Maternity Ward</option><option>ICU</option>
-              <option>Paediatric Ward</option><option>Dental Clinic</option>
-              <option>Eye Clinic</option><option>State House Clinic</option>
-            </select>
+      <!-- INVENTORY -->
+      <div id="sec-inventory" class="section">
+        <div class="panel">
+          <div class="panel-header"><h3>💊 Drug Inventory</h3>
+            <button class="btn btn-secondary btn-sm" onclick="printTable('inv-table')">🖨 Print</button>
+            <button class="btn btn-secondary btn-sm" onclick="exportCSV()">⬇ CSV</button>
+            <button class="btn btn-primary btn-sm" onclick="openModal('modal-add-drug')">+ Add Drug</button>
           </div>
-          <div class="form-group">
-            <label>Issue Source</label>
-            <select id="push-source"><option>Contract</option><option>Stop Gap</option><option>Emergency</option><option>Regular</option></select>
+          <div class="filters">
+            <select id="inv-filter-status" onchange="renderInventory()"><option value="">All Status</option><option>In Stock</option><option>At Buffer</option><option>Critical/Zero</option><option>Expired</option></select>
+            <select id="inv-filter-source" onchange="renderInventory()"><option value="">All Sources</option><option>Contract</option><option>Stop Gap</option><option>Emergency</option><option>Regular</option></select>
+            <input type="text" id="inv-search" placeholder="Search drug…" oninput="renderInventory()"/>
           </div>
-          <div class="form-group">
-            <label>Date of Issue</label>
-            <input type="date" id="push-date"/>
-          </div>
+          <table id="inv-table"><thead><tr><th>Drug Name</th><th>Source</th><th>Pack Size</th><th>Qty (Packs)</th><th>Total Units</th><th>Buffer Qty</th><th>Expiry</th><th>Status</th><th></th></tr></thead><tbody id="inv-body"></tbody></table>
         </div>
+      </div>
 
-        <div style="margin-bottom:8px;font-weight:700;font-size:12px;color:var(--grey5);">Drug Items</div>
-        <table class="drug-items-table" id="push-drug-table">
-          <thead><tr><th>Drug Name</th><th>Pack Size</th><th>Qty (Packs)</th><th>Total Units</th><th>Unit</th><th></th></tr></thead>
-          <tbody id="push-drug-body"></tbody>
-        </table>
-        <button class="btn btn-secondary btn-sm" onclick="addPushDrug()" style="margin-bottom:12px;">+ Add Drug</button>
-
-        <div class="form-grid">
-          <div class="form-group"><label>Issued By (AD, Stores)</label><input type="text" id="push-issued-by" placeholder="Full name"/></div>
-          <div class="form-group"><label>Received By (Dept.)</label><input type="text" id="push-received-by" placeholder="Full name"/></div>
-          <div class="form-group"><label>Remarks</label><input type="text" id="push-remarks" placeholder="Optional"/></div>
-        </div>
-
-        <!-- HOD APPROVAL ZONE for PUSH -->
-        <div id="push-hod-zone" class="hod-approval-zone">
-          <h4>🔐 HOD Pharmacy Approval — Required Before SIV is Posted</h4>
-          <div id="push-hod-locked" class="hod-lock-msg">
-            🔒 Switch to <strong>HOD Pharmacy</strong> role (top-left) to approve this issuance.
+      <!-- PUSH -->
+      <div id="sec-push" class="section">
+        <div class="panel-title">📤 Issue Drugs — PUSH</div>
+        <div class="panel-sub">Store-initiated dispatch · <strong>HOD Pharmacy must approve · Inventory deducted immediately upon HOD approval</strong></div>
+        <div class="panel">
+          <div class="panel-header"><h3>📎 Pre-fill from Uploaded Requisition</h3><span class="badge badge-blue">Optional</span></div>
+          <p style="font-size:12px;color:var(--grey4);margin-bottom:10px;">Upload Excel (.xlsx/.csv) or Word (.docx) · Columns: <strong>Drug Name | Quantity | Unit | Justification</strong></p>
+          <div class="upload-zone" onclick="document.getElementById('push-file-input').click()">
+            <div class="uz-icon">📋</div><p><strong>Click or drag &amp; drop</strong> requisition file</p><p>Excel (.xlsx/.csv) or Word (.docx)</p>
           </div>
-          <div id="push-hod-actions" style="display:none;">
-            <div class="form-group" style="margin-bottom:10px;">
-              <label>HOD Comments (optional)</label>
-              <textarea id="push-hod-comment" placeholder="Add approval comments…"></textarea>
+          <input type="file" id="push-file-input" accept=".xlsx,.xls,.csv,.docx" style="display:none" onchange="handlePushUpload(this)"/>
+          <div id="push-upload-result" style="margin-top:8px;font-size:12px;"></div>
+        </div>
+        <div class="panel">
+          <div class="panel-header"><h3>Store Issuance Voucher</h3><span class="badge badge-blue" id="push-siv-no">SIV/Drugs/——</span></div>
+          <div class="form-grid">
+            <div class="form-group"><label>Destination Department</label>
+              <select id="push-dept"><option value="">Select…</option><option>GOPD Pharmacy</option><option>Accident &amp; Emergency</option><option>Presidential Wing</option><option>Theatre</option><option>Medical Ward</option><option>Surgical Ward</option><option>Maternity Ward</option><option>ICU</option><option>Paediatric Ward</option><option>Dental Clinic</option><option>Eye Clinic</option><option>State House Clinic</option></select>
             </div>
-            <div style="display:flex;gap:8px;">
-              <button class="btn btn-hod" onclick="hodApprovePush()">✅ Approve &amp; Post SIV</button>
-              <button class="btn btn-danger" onclick="hodRejectPush()">❌ Reject Issuance</button>
+            <div class="form-group"><label>Issue Source</label><select id="push-source"><option>Contract</option><option>Stop Gap</option><option>Emergency</option><option>Regular</option></select></div>
+            <div class="form-group"><label>Date of Issue</label><input type="date" id="push-date"/></div>
+          </div>
+          <div style="font-weight:700;font-size:12px;color:var(--grey5);margin-bottom:6px;">Drug Items</div>
+          <table class="dit"><thead><tr><th>Drug Name</th><th>Pack Size</th><th>Qty (Packs)</th><th>Total Units</th><th>Unit</th><th></th></tr></thead><tbody id="push-drug-body"></tbody></table>
+          <button class="btn btn-secondary btn-sm" onclick="addPushDrug()" style="margin-bottom:12px;">+ Add Drug Row</button>
+          <div class="form-grid">
+            <div class="form-group"><label>Issued By</label><input type="text" id="push-issued-by"/></div>
+            <div class="form-group"><label>Received By (Dept.)</label><input type="text" id="push-received-by"/></div>
+            <div class="form-group"><label>Remarks</label><input type="text" id="push-remarks"/></div>
+          </div>
+          <div id="push-hod-zone" class="hod-zone">
+            <h4>🔐 HOD Pharmacy Approval — Required Before SIV Posts</h4>
+            <div id="push-hod-locked" class="lock-msg">🔒 Only <strong>HOD Pharmacy</strong> can approve issuances. Sign in as HOD Pharmacy to enable.</div>
+            <div id="push-hod-actions" style="display:none;">
+              <div class="form-group" style="margin-bottom:10px;"><label>HOD Comments (optional)</label><textarea id="push-hod-comment" placeholder="Approval comments…"></textarea></div>
+              <div style="display:flex;gap:8px;">
+                <button class="btn btn-hod" onclick="hodApprovePush()">✅ Approve &amp; Post SIV</button>
+                <button class="btn btn-danger" onclick="hodRejectPush()">❌ Reject</button>
+              </div>
             </div>
           </div>
-        </div>
-
-        <div style="margin-top:12px;display:flex;gap:8px;">
-          <button class="btn btn-secondary" onclick="resetPushForm()">Reset</button>
-          <button class="btn btn-amber" onclick="savePushDraft()">💾 Save Draft (Pending HOD)</button>
-        </div>
-      </div>
-
-      <div class="panel">
-        <div class="panel-header"><h3>Today's SIVs</h3></div>
-        <div id="push-today-sivs"><p style="color:var(--grey4);font-size:12px;">None yet today.</p></div>
-      </div>
-    </div>
-
-    <!-- ══════════════ PULL (Requisitions) ══════════════ -->
-    <div id="sec-pull" class="section">
-      <div class="panel-title">📥 Drug Requisitions — PULL</div>
-      <div class="panel-sub">Dept. requests · AD Stores reviews &amp; modifies qty · <strong>HOD Pharmacy approves before SIV is issued</strong></div>
-
-      <!-- Workflow -->
-      <div class="panel">
-        <div class="workflow">
-          <div class="wf-step"><div class="icon">✍️</div><span>Dept. raises requisition</span></div>
-          <div class="wf-arrow">›</div>
-          <div class="wf-step"><div class="icon">✏️</div><span>AD Stores reviews &amp; modifies qty</span></div>
-          <div class="wf-arrow">›</div>
-          <div class="wf-step"><div class="icon hod-step">🔐</div><span><strong>HOD Pharmacy approves</strong></span></div>
-          <div class="wf-arrow">›</div>
-          <div class="wf-step"><div class="icon">✅</div><span>SIV issued</span></div>
-          <div class="wf-arrow">›</div>
-          <div class="wf-step"><div class="icon">📦</div><span>Drugs collected</span></div>
-          <div class="wf-arrow">›</div>
-          <div class="wf-step"><div class="icon">🖊</div><span>Dept. acknowledges</span></div>
-        </div>
-      </div>
-
-      <div class="panel">
-        <div class="panel-header">
-          <h3>All Requisitions</h3>
-          <button class="btn btn-secondary btn-sm" onclick="openModal('modal-upload-req')">📎 Upload (Excel/Word)</button>
-          <button class="btn btn-primary btn-sm" onclick="openModal('modal-new-req')">+ New Requisition</button>
-        </div>
-        <div class="filters">
-          <select id="pull-filter-dept" onchange="renderRequisitions()">
-            <option value="">All Departments</option>
-            <option>GOPD Pharmacy</option><option>Accident &amp; Emergency</option>
-            <option>Presidential Wing</option><option>Theatre</option>
-            <option>Medical Ward</option><option>Maternity Ward</option>
-          </select>
-          <select id="pull-filter-status" onchange="renderRequisitions()">
-            <option value="">All Status</option>
-            <option>Pending Review</option><option>Pending HOD Approval</option>
-            <option>HOD Approved</option><option>HOD Rejected</option>
-            <option>Issued</option><option>Acknowledged</option>
-          </select>
-        </div>
-        <table>
-          <thead><tr><th>Req. No.</th><th>Department</th><th>Drugs Requested</th><th>Urgency</th><th>Date</th><th>Status</th><th>SIV</th><th>Action</th></tr></thead>
-          <tbody id="pull-body"></tbody>
-        </table>
-      </div>
-    </div>
-
-    <!-- ══════════════ SIV REGISTER ══════════════ -->
-    <div id="sec-siv" class="section">
-      <div class="panel">
-        <div class="panel-header">
-          <h3>🧾 SIV Register</h3>
-          <small style="color:var(--grey4);">Sequential · Non-repeating · SIV/Drugs/YYYY/MM/DD/NNN</small>
-          <button class="btn btn-secondary btn-sm" onclick="exportSIV()">⬇ Export</button>
-          <button class="btn btn-secondary btn-sm" onclick="printTable('siv-table')">🖨 Print</button>
-        </div>
-        <table id="siv-table">
-          <thead><tr><th>SIV Number</th><th>Department</th><th>Drug(s)</th><th>Total Qty</th><th>Issue Source</th><th>Approved By (HOD)</th><th>Issued By</th><th>Date</th><th>Flow</th><th>Action</th></tr></thead>
-          <tbody id="siv-body"></tbody>
-        </table>
-      </div>
-    </div>
-
-    <!-- ══════════════ RECEIVE STOCK ══════════════ -->
-    <div id="sec-receive" class="section">
-      <div class="panel">
-        <div class="panel-header"><h3>📦 Receive Stock — GRN</h3></div>
-        <div class="form-grid">
-          <div class="form-group"><label>GRN / Waybill No.</label><input type="text" id="grn-no" placeholder="Auto or manual"/></div>
-          <div class="form-group"><label>Source of Supply</label><select id="grn-source"><option>Contract</option><option>Stop Gap</option><option>Emergency</option><option>Regular</option></select></div>
-          <div class="form-group"><label>Supplier</label>
-            <select id="grn-supplier"><option value="">Select Supplier…</option><option>Emzor Pharma</option><option>GSK Nigeria</option><option>Fidson Healthcare</option><option>May &amp; Baker</option><option>Swipha</option><option>Juhel Nigeria</option></select>
-          </div>
-          <div class="form-group"><label>Date Received</label><input type="date" id="grn-date"/></div>
-          <div class="form-group"><label>Drug Name</label><input type="text" id="grn-drug" placeholder="Drug name"/></div>
-          <div class="form-group"><label>Pack Size</label>
-            <select id="grn-packsize"><option>1 (Unit)</option><option>5</option><option>10</option><option>12</option><option>14</option><option>20</option><option>24</option><option>28</option><option>30</option><option>50</option><option>60</option><option>100</option><option>Custom…</option></select>
-          </div>
-          <div class="form-group"><label>Qty Received (Packs)</label><input type="number" id="grn-qty" min="1" oninput="calcGRNTotal()"/></div>
-          <div class="form-group"><label>Total Units (Auto)</label><input type="text" id="grn-total" readonly placeholder="Auto"/></div>
-          <div class="form-group"><label>Batch Number</label><input type="text" id="grn-batch"/></div>
-          <div class="form-group"><label>Unit Cost (₦)</label><input type="number" id="grn-cost"/></div>
-          <div class="form-group"><label>Manufacture Date</label><input type="date" id="grn-mfg"/></div>
-          <div class="form-group"><label>Expiry Date</label><input type="date" id="grn-expiry"/></div>
-          <div class="form-group"><label>Buffer Qty Override</label><input type="number" id="grn-buffer"/></div>
-          <div class="form-group"><label>Storage Location</label>
-            <select id="grn-location"><option>Shelf A1</option><option>Shelf A2</option><option>Shelf B</option><option>Cold Chain</option><option>Controlled Drugs</option></select>
-          </div>
-          <div class="form-group"><label>Remarks</label><input type="text" id="grn-remarks"/></div>
-        </div>
-        <div style="display:flex;gap:8px;">
-          <button class="btn btn-secondary" onclick="resetGRN()">Reset</button>
-          <button class="btn btn-primary" onclick="postGRN()">Post GRN</button>
-        </div>
-      </div>
-      <div class="panel"><div class="panel-header"><h3>Recent GRNs</h3></div><div id="grn-list"><p style="color:var(--grey4);font-size:12px;">No GRNs yet.</p></div></div>
-    </div>
-
-    <!-- ══════════════ IMPORT ══════════════ -->
-    <div id="sec-import" class="section">
-      <div class="panel-title">📊 Import from Excel / Word</div>
-      <div class="panel-sub">Upload stock sheets or requisition tables</div>
-
-      <div class="panel">
-        <h3 style="margin-bottom:8px;">📊 Import Stock Sheet (Excel/CSV)</h3>
-        <p style="font-size:12px;color:var(--grey4);margin-bottom:12px;">Supports <strong>.xlsx, .xls, .csv</strong>. SHMC monthly format auto-detected. Columns: C=Drug Name, D=Expiry, E=Bulk Total, F=Procured, G=Withhold, H=GOPD Rcvd, I=PW Issued, J=Wards Issued, K=Stock at Hand.</p>
-        <div class="upload-zone" onclick="document.getElementById('stock-file').click()">
-          <div class="icon">📂</div>
-          <p><strong>Click or drag &amp; drop</strong> Excel/CSV file</p>
-          <p>SHMC monthly stock sheet format auto-mapped</p>
-        </div>
-        <input type="file" id="stock-file" accept=".xlsx,.xls,.csv" style="display:none" onchange="handleStockImport(this)"/>
-        <div id="stock-import-result" style="margin-top:8px;"></div>
-      </div>
-
-      <div class="panel">
-        <h3 style="margin-bottom:8px;">📄 Import Requisition (Excel / Word)</h3>
-        <p style="font-size:12px;color:var(--grey4);margin-bottom:12px;">Upload <strong>.xlsx, .csv, or .docx</strong> with a table: Drug Name | Quantity | Unit | Justification. System parses and creates a Pull requisition automatically.</p>
-        <div class="form-group" style="margin-bottom:12px;max-width:300px;">
-          <label>Requesting Department</label>
-          <select id="import-req-dept">
-            <option value="">Select Department…</option>
-            <option>GOPD Pharmacy</option><option>Accident &amp; Emergency</option>
-            <option>Presidential Wing</option><option>Theatre</option>
-            <option>Medical Ward</option><option>Surgical Ward</option>
-            <option>Maternity Ward</option><option>ICU</option><option>Paediatric Ward</option>
-          </select>
-        </div>
-        <div class="form-group" style="margin-bottom:12px;max-width:200px;">
-          <label>Route To</label>
-          <select id="import-req-route">
-            <option value="pull">Pull (Requisition)</option>
-            <option value="push">Push (Issue)</option>
-          </select>
-        </div>
-        <div class="upload-zone" onclick="document.getElementById('req-file').click()">
-          <div class="icon">📋</div>
-          <p><strong>Click or drag &amp; drop</strong> requisition file</p>
-          <p>Excel (.xlsx/.csv) or Word (.docx) table accepted</p>
-        </div>
-        <input type="file" id="req-file" accept=".xlsx,.xls,.csv,.docx" style="display:none" onchange="handleReqImport(this)"/>
-        <div id="req-import-result" style="margin-top:8px;"></div>
-      </div>
-    </div>
-
-    <!-- ══════════════ EXPIRED ══════════════ -->
-    <div id="sec-expired" class="section">
-      <div class="panel">
-        <div class="panel-header">
-          <h3>☠️ Expired Drug Register</h3>
-          <button class="btn btn-danger btn-sm" onclick="openModal('modal-expired')">+ Record Expired</button>
-        </div>
-        <div class="stat-grid" style="grid-template-columns:repeat(3,1fr);margin-bottom:16px;">
-          <div class="stat-card red"><div class="val" id="exp-total">0</div><div class="lbl">Total Expired Lines</div></div>
-          <div class="stat-card amber"><div class="val" id="exp-pending">0</div><div class="lbl">Pending Condemnation</div></div>
-          <div class="stat-card green"><div class="val" id="exp-disposed">0</div><div class="lbl">Condemned &amp; Disposed</div></div>
-        </div>
-        <table>
-          <thead><tr><th>S/No</th><th>Drug Name</th><th>Batch No.</th><th>Expiry</th><th>Qty</th><th>Detected</th><th>By</th><th>Status</th><th>Remarks</th><th>Action</th></tr></thead>
-          <tbody id="expired-body"></tbody>
-        </table>
-      </div>
-    </div>
-
-    <!-- ══════════════ PROCUREMENT ══════════════ -->
-    <div id="sec-procurement" class="section">
-      <div class="panel">
-        <div class="panel-header">
-          <h3>📋 Procurement Requests</h3>
-          <button class="btn btn-primary btn-sm" onclick="openModal('modal-procurement')">+ New Request</button>
-        </div>
-        <div class="workflow">
-          <div class="wf-step"><div class="icon">✍️</div><span>AD Stores initiates</span></div>
-          <div class="wf-arrow">›</div>
-          <div class="wf-step"><div class="icon hod-step">👁️</div><span>HOD Pharmacy (CC)</span></div>
-          <div class="wf-arrow">›</div>
-          <div class="wf-step"><div class="icon">⏳</div><span>CMAC approves</span></div>
-          <div class="wf-arrow">›</div>
-          <div class="wf-step"><div class="icon">👔</div><span>Perm. Sec. (bulk)</span></div>
-          <div class="wf-arrow">›</div>
-          <div class="wf-step"><div class="icon">📦</div><span>Procurement actioned</span></div>
-        </div>
-        <table>
-          <thead><tr><th>Req. No.</th><th>Drug</th><th>Qty</th><th>Source</th><th>Urgency</th><th>By</th><th>HOD</th><th>Date</th><th>CMAC</th><th>Perm. Sec.</th><th>Action</th></tr></thead>
-          <tbody id="proc-body"></tbody>
-        </table>
-      </div>
-    </div>
-
-    <!-- ══════════════ REPORTS ══════════════ -->
-    <div id="sec-reports" class="section">
-      <div class="panel"><div class="panel-header"><h3>📈 Reports &amp; Analytics</h3></div>
-        <p style="color:var(--grey4);font-size:13px;">Statistics and charts will appear here as data accumulates.</p>
-      </div>
-    </div>
-
-    <!-- ══════════════ ALERTS ══════════════ -->
-    <div id="sec-alerts" class="section">
-      <div class="panel">
-        <div class="panel-header"><h3>🔔 Alerts &amp; Notifications</h3><button class="btn btn-secondary btn-sm" onclick="markAllRead()">Mark All Read</button></div>
-        <div id="alerts-list"></div>
-      </div>
-    </div>
-
-    <!-- ══════════════ SETTINGS ══════════════ -->
-    <div id="sec-settings" class="section">
-      <div class="panel">
-        <div class="panel-header"><h3>⚙️ Buffer Quantity Settings</h3></div>
-        <div class="form-grid">
-          <div class="form-group"><label>Global Buffer Quantity (units)</label><input type="number" id="global-buffer" value="50"/></div>
-          <div class="form-group"><label>Critical Definition</label>
-            <select id="critical-def"><option>Zero stock only = Critical</option><option>Below 50% of buffer = Critical</option></select>
+          <div id="push-blocked-notice" class="blocked-msg" style="display:none;">🚫 Issuance blocked until HOD Pharmacy approves. Save as draft to forward for approval.</div>
+          <div style="margin-top:12px;display:flex;gap:8px;">
+            <button class="btn btn-secondary" onclick="resetPushForm()">Reset</button>
+            <button class="btn btn-amber" onclick="savePushDraft()">💾 Save &amp; Forward to HOD</button>
           </div>
         </div>
-        <button class="btn btn-primary" onclick="saveSettings()">Save Settings</button>
+        <div class="panel"><div class="panel-header"><h3>Today's Posted SIVs</h3></div><div id="push-today-sivs"><p style="color:var(--grey4);font-size:12px;">None posted yet today.</p></div></div>
       </div>
-    </div>
 
-    <!-- ══════════════ AUDIT ══════════════ -->
-    <div id="sec-audit" class="section">
-      <div class="panel">
-        <div class="panel-header"><h3>🔄 Audit Trail</h3><button class="btn btn-secondary btn-sm" onclick="exportAudit()">⬇ Export</button></div>
-        <div id="audit-list"></div>
+      <!-- PULL -->
+      <div id="sec-pull" class="section">
+        <div class="panel-title">📥 Drug Requisitions — PULL</div>
+        <div class="panel-sub">Dept. requests → AD Stores reviews → <strong>HOD Pharmacy approves → SIV issued + Inventory deducted immediately</strong></div>
+        <div class="panel">
+          <div class="workflow">
+            <div class="wf-step"><div class="wi">✍️</div><span>Dept. raises req.</span></div><div class="wf-arrow">›</div>
+            <div class="wf-step"><div class="wi">✏️</div><span>AD Stores reviews</span></div><div class="wf-arrow">›</div>
+            <div class="wf-step"><div class="wi hod">🔐</div><span><strong>HOD approves</strong></span></div><div class="wf-arrow">›</div>
+            <div class="wf-step"><div class="wi done">✅</div><span>SIV + inventory deducted</span></div><div class="wf-arrow">›</div>
+            <div class="wf-step"><div class="wi">📦</div><span>Drugs collected</span></div>
+          </div>
+        </div>
+        <div class="panel">
+          <div class="panel-header"><h3>All Requisitions</h3><button class="btn btn-primary btn-sm" onclick="openModal('modal-new-req')">+ New Requisition</button></div>
+          <div class="filters">
+            <select id="pull-filter-dept" onchange="renderRequisitions()"><option value="">All Departments</option><option>GOPD Pharmacy</option><option>Accident &amp; Emergency</option><option>Presidential Wing</option><option>Theatre</option><option>Medical Ward</option><option>Maternity Ward</option></select>
+            <select id="pull-filter-status" onchange="renderRequisitions()"><option value="">All Status</option><option>Pending Review</option><option>Pending HOD Approval</option><option>HOD Approved</option><option>HOD Rejected</option><option>Issued</option></select>
+          </div>
+          <table><thead><tr><th>Req. No.</th><th>Dept.</th><th>Drugs</th><th>Urgency</th><th>Date</th><th>Status</th><th>SIV</th><th>Action</th></tr></thead><tbody id="pull-body"></tbody></table>
+        </div>
       </div>
-    </div>
 
-  </div><!-- /content -->
-</div><!-- /main -->
+      <!-- SIV -->
+      <div id="sec-siv" class="section">
+        <div class="panel">
+          <div class="panel-header"><h3>🧾 SIV Register</h3><button class="btn btn-secondary btn-sm" onclick="exportSIV()">⬇ Export</button><button class="btn btn-secondary btn-sm" onclick="printTable('siv-table')">🖨 Print</button></div>
+          <table id="siv-table"><thead><tr><th>SIV Number</th><th>Department</th><th>Drug(s)</th><th>Total Units</th><th>Source</th><th>Approved By (HOD)</th><th>Issued By</th><th>Date</th><th>Flow</th></tr></thead><tbody id="siv-body"></tbody></table>
+        </div>
+      </div>
 
-<!-- ═══════════════════════════════════════
-     MODALS
-═══════════════════════════════════════ -->
+      <!-- RECEIVE STOCK -->
+      <div id="sec-receive" class="section">
+        <div class="panel-title">📦 Receive Stock — GRN</div>
+        <div class="panel-sub">Enter drugs manually or upload a stock sheet (Excel/Word)</div>
+        <div class="em-tabs">
+          <button class="active" onclick="switchReceiveMode('manual',this)">✏️ Manual Entry</button>
+          <button onclick="switchReceiveMode('upload',this)">📂 Upload Sheet</button>
+        </div>
+        <div id="receive-manual" class="entry-panel active">
+          <div class="panel"><div class="panel-header"><h3>GRN — Manual Entry</h3></div>
+            <div class="form-grid">
+              <div class="form-group"><label>GRN / Waybill No.</label><input type="text" id="grn-no" placeholder="Auto-generated"/></div>
+              <div class="form-group"><label>Source of Supply</label><select id="grn-source"><option>Contract</option><option>Stop Gap</option><option>Emergency</option><option>Regular</option></select></div>
+              <div class="form-group"><label>Supplier</label><select id="grn-supplier"><option value="">Select…</option><option>Emzor Pharma</option><option>GSK Nigeria</option><option>Fidson Healthcare</option><option>May &amp; Baker</option><option>Swipha</option><option>Juhel Nigeria</option></select></div>
+              <div class="form-group"><label>Date Received</label><input type="date" id="grn-date"/></div>
+              <div class="form-group"><label>Drug Name</label><input type="text" id="grn-drug" placeholder="Full drug name"/></div>
+              <div class="form-group"><label>Pack Size</label><select id="grn-packsize"><option>1</option><option>5</option><option>10</option><option>12</option><option>14</option><option>20</option><option>24</option><option>28</option><option>30</option><option>50</option><option>60</option><option>100</option></select></div>
+              <div class="form-group"><label>Qty Received (Packs)</label><input type="number" id="grn-qty" min="1" oninput="calcGRNTotal()"/></div>
+              <div class="form-group"><label>Total Units (Auto)</label><input type="text" id="grn-total" readonly/></div>
+              <div class="form-group"><label>Batch Number</label><input type="text" id="grn-batch"/></div>
+              <div class="form-group"><label>Unit Cost (₦)</label><input type="number" id="grn-cost"/></div>
+              <div class="form-group"><label>Manufacture Date</label><input type="date" id="grn-mfg"/></div>
+              <div class="form-group"><label>Expiry Date</label><input type="date" id="grn-expiry"/></div>
+              <div class="form-group"><label>Buffer Qty Override</label><input type="number" id="grn-buffer"/></div>
+              <div class="form-group"><label>Storage Location</label><select id="grn-location"><option>Shelf A1</option><option>Shelf A2</option><option>Shelf B</option><option>Cold Chain</option><option>Controlled Drugs</option></select></div>
+              <div class="form-group"><label>Remarks</label><input type="text" id="grn-remarks"/></div>
+            </div>
+            <div style="display:flex;gap:8px;"><button class="btn btn-secondary" onclick="resetGRN()">Reset</button><button class="btn btn-primary" onclick="postGRN()">Post GRN</button></div>
+          </div>
+        </div>
+        <div id="receive-upload" class="entry-panel">
+          <div class="panel">
+            <div class="panel-header"><h3>GRN — Upload Stock Sheet</h3></div>
+            <div class="info-box">
+              📋 <strong>Required column names (order flexible):</strong><br>
+              <strong>Drug Name</strong> | <strong>Quantity</strong> | <strong>Unit</strong> | <strong>Pack Size</strong> | <strong>Batch Number</strong> | <strong>Manufacture Date</strong> | <strong>Expiry Date</strong> | <strong>Unit Cost</strong> | <strong>Supplier</strong> | <strong>Source</strong> | <strong>Storage Location</strong> | <strong>Remarks</strong><br>
+              <em>Works with Excel (.xlsx/.csv) and Word (.docx) tables.</em>
+            </div>
+            <div class="form-grid" style="margin-bottom:14px;">
+              <div class="form-group"><label>Default Source (if column blank)</label><select id="grn-upload-source"><option>Contract</option><option>Stop Gap</option><option>Emergency</option><option>Regular</option></select></div>
+              <div class="form-group"><label>Default Supplier (if column blank)</label><input type="text" id="grn-upload-supplier" placeholder="e.g. Emzor Pharma"/></div>
+              <div class="form-group"><label>Date Received</label><input type="date" id="grn-upload-date"/></div>
+            </div>
+            <div class="upload-zone" onclick="document.getElementById('grn-upload-file').click()">
+              <div class="uz-icon">📂</div><p><strong>Click or drag &amp; drop</strong> stock sheet</p><p>Excel (.xlsx/.csv) or Word (.docx)</p>
+            </div>
+            <input type="file" id="grn-upload-file" accept=".xlsx,.xls,.csv,.docx" style="display:none" onchange="handleGRNUpload(this)"/>
+            <div id="grn-upload-result" style="margin-top:10px;font-size:12px;"></div>
+            <div id="grn-upload-preview" style="margin-top:12px;display:none;">
+              <div class="panel-header"><h3>Preview — Confirm &amp; Post</h3><button class="btn btn-primary btn-sm" onclick="postGRNUpload()">✅ Post All GRNs</button></div>
+              <div style="overflow-x:auto;"><table><thead id="grn-preview-head"></thead><tbody id="grn-preview-body"></tbody></table></div>
+            </div>
+          </div>
+        </div>
+        <div class="panel"><div class="panel-header"><h3>Recent GRNs</h3></div><div id="grn-list"><p style="color:var(--grey4);font-size:12px;">No GRNs posted yet.</p></div></div>
+      </div>
 
-<!-- Add Drug -->
+      <!-- EXPIRED -->
+      <div id="sec-expired" class="section">
+        <div class="panel">
+          <div class="panel-header"><h3>☠️ Expired Drug Register</h3><button class="btn btn-danger btn-sm" onclick="openModal('modal-expired')">+ Record Expired</button></div>
+          <div class="stat-grid" style="grid-template-columns:repeat(3,1fr);margin-bottom:16px;">
+            <div class="stat-card red"><div class="val" id="exp-total">0</div><div class="lbl">Total Expired Lines</div></div>
+            <div class="stat-card amber"><div class="val" id="exp-pending">0</div><div class="lbl">Pending Condemnation</div></div>
+            <div class="stat-card green"><div class="val" id="exp-disposed">0</div><div class="lbl">Condemned &amp; Disposed</div></div>
+          </div>
+          <table><thead><tr><th>S/No</th><th>Drug Name</th><th>Batch</th><th>Expiry</th><th>Qty</th><th>Detected</th><th>By</th><th>Status</th><th>Remarks</th><th></th></tr></thead><tbody id="expired-body"></tbody></table>
+        </div>
+      </div>
+
+      <!-- PROCUREMENT -->
+      <div id="sec-procurement" class="section">
+        <div class="panel">
+          <div class="panel-header"><h3>📋 Procurement Requests</h3><button class="btn btn-primary btn-sm" onclick="openModal('modal-procurement')">+ New Request</button></div>
+          <table><thead><tr><th>Req. No.</th><th>Drug</th><th>Qty</th><th>Source</th><th>Urgency</th><th>By</th><th>Date</th><th>Status</th><th></th></tr></thead><tbody id="proc-body"></tbody></table>
+        </div>
+      </div>
+
+      <!-- REPORTS -->
+      <div id="sec-reports" class="section">
+        <div class="panel"><div class="panel-header"><h3>📈 Reports &amp; Analytics</h3></div><p style="color:var(--grey4);">Statistics accumulate as transactions are posted.</p></div>
+      </div>
+
+      <!-- ALERTS -->
+      <div id="sec-alerts" class="section">
+        <div class="panel"><div class="panel-header"><h3>🔔 Alerts</h3><button class="btn btn-secondary btn-sm" onclick="markAllRead()">Mark All Read</button></div><div id="alerts-list"></div></div>
+      </div>
+
+      <!-- ADMIN -->
+      <div id="sec-admin" class="section">
+        <div class="panel-title">👑 Admin Panel — User Management</div>
+        <div class="panel-sub">Only <strong>pharmsero@gmail.com</strong> has admin access. Approve or reject sign-up requests below.</div>
+        <div class="panel">
+          <div class="panel-header"><h3>Registered Users</h3><button class="btn btn-secondary btn-sm" onclick="renderAdminPanel()">🔄 Refresh</button></div>
+          <div class="filters"><select id="admin-filter" onchange="renderAdminPanel()"><option value="">All</option><option value="pending">Pending</option><option value="approved">Approved</option><option value="rejected">Rejected</option></select></div>
+          <table><thead><tr><th>Name</th><th>Email</th><th>Phone</th><th>Role</th><th>Status</th><th>Registered</th><th>Action</th></tr></thead><tbody id="admin-body"></tbody></table>
+        </div>
+      </div>
+
+      <!-- AUDIT -->
+      <div id="sec-audit" class="section">
+        <div class="panel"><div class="panel-header"><h3>🔄 Audit Trail</h3></div><div id="audit-list"></div></div>
+      </div>
+
+    </div><!-- /content -->
+    <footer style="text-align:center;padding:14px;font-size:11px;color:var(--grey4);background:var(--white);border-top:1px solid var(--grey2);">
+      State House Medical Centre · Pharmacy Bulk Store IMS v3 · Aso Rock, Abuja · © 2026 · Confidential
+    </footer>
+  </div>
+</div>
+
+<!-- MODALS -->
 <div class="modal-overlay hidden" id="modal-add-drug">
-  <div class="modal">
-    <div class="modal-header"><h3>+ Add Drug to Inventory</h3><button class="modal-close" onclick="closeModal('modal-add-drug')">✕</button></div>
-    <div class="modal-body">
-      <div class="form-grid">
-        <div class="form-group"><label>Drug Name</label><input type="text" id="ad-name"/></div>
-        <div class="form-group"><label>Source</label><select id="ad-source"><option>Contract</option><option>Stop Gap</option><option>Emergency</option><option>Regular</option></select></div>
-        <div class="form-group"><label>Pack Size</label><select id="ad-packsize"><option>1</option><option>10</option><option>12</option><option>14</option><option>20</option><option>28</option><option>30</option><option>50</option><option>100</option><option>Custom…</option></select></div>
-        <div class="form-group"><label>Qty on Hand (Packs)</label><input type="number" id="ad-qty" oninput="calcAddDrugTotal()"/></div>
-        <div class="form-group"><label>Total Units (Auto)</label><input type="text" id="ad-total" readonly/></div>
-        <div class="form-group"><label>Buffer Qty Override (units)</label><input type="number" id="ad-buffer"/></div>
-        <div class="form-group"><label>Expiry Date</label><input type="date" id="ad-expiry"/></div>
-        <div class="form-group"><label>Batch Number</label><input type="text" id="ad-batch"/></div>
-      </div>
-    </div>
+  <div class="modal"><div class="modal-header"><h3>+ Add Drug to Inventory</h3><button class="modal-close" onclick="closeModal('modal-add-drug')">✕</button></div>
+    <div class="modal-body"><div class="form-grid">
+      <div class="form-group"><label>Drug Name</label><input type="text" id="ad-name"/></div>
+      <div class="form-group"><label>Source</label><select id="ad-source"><option>Contract</option><option>Stop Gap</option><option>Emergency</option><option>Regular</option></select></div>
+      <div class="form-group"><label>Pack Size</label><select id="ad-packsize"><option>1</option><option>10</option><option>12</option><option>14</option><option>20</option><option>28</option><option>30</option><option>50</option><option>100</option></select></div>
+      <div class="form-group"><label>Qty on Hand (Packs)</label><input type="number" id="ad-qty" oninput="calcAddDrugTotal()"/></div>
+      <div class="form-group"><label>Total Units (Auto)</label><input type="text" id="ad-total" readonly/></div>
+      <div class="form-group"><label>Buffer Qty (units)</label><input type="number" id="ad-buffer"/></div>
+      <div class="form-group"><label>Expiry Date</label><input type="date" id="ad-expiry"/></div>
+      <div class="form-group"><label>Batch Number</label><input type="text" id="ad-batch"/></div>
+    </div></div>
     <div class="modal-footer"><button class="btn btn-secondary" onclick="closeModal('modal-add-drug')">Cancel</button><button class="btn btn-primary" onclick="addDrug()">Add Drug</button></div>
   </div>
 </div>
 
-<!-- New Requisition (Pull) -->
 <div class="modal-overlay hidden" id="modal-new-req">
-  <div class="modal">
-    <div class="modal-header"><h3>📥 New Drug Requisition</h3><button class="modal-close" onclick="closeModal('modal-new-req')">✕</button></div>
+  <div class="modal"><div class="modal-header"><h3>📥 New Drug Requisition</h3><button class="modal-close" onclick="closeModal('modal-new-req')">✕</button></div>
     <div class="modal-body">
-      <div style="background:var(--teal-lt);border-left:3px solid var(--teal);padding:8px 12px;border-radius:5px;font-size:12px;margin-bottom:14px;">
-        📌 This requisition goes to AD, Stores for review. AD Stores may modify quantities before forwarding to <strong>HOD Pharmacy for approval</strong>.
-      </div>
+      <div class="info-box">📌 Requisition → AD Stores reviews → <strong>HOD Pharmacy approves</strong> → SIV issued + inventory deducted immediately.</div>
       <div class="form-grid">
         <div class="form-group"><label>Req. No. (Auto)</label><input type="text" id="req-no" readonly/></div>
         <div class="form-group"><label>Date</label><input type="date" id="req-date"/></div>
@@ -696,1143 +541,629 @@ tr.row-purple td{background:var(--purple-lt)!important;}
         <div class="form-group"><label>Urgency</label><select id="req-urgency"><option>Routine</option><option>Urgent</option><option>Emergency</option></select></div>
         <div class="form-group"><label>Requested By</label><input type="text" id="req-by"/></div>
       </div>
-      <div style="font-weight:700;font-size:12px;margin-bottom:6px;">Drugs Requested</div>
-      <table class="drug-items-table">
-        <thead><tr><th>Drug Name</th><th>Qty Needed</th><th>Pack Size</th><th>Unit</th><th>Justification</th><th></th></tr></thead>
-        <tbody id="req-drug-body"></tbody>
-      </table>
-      <button class="btn btn-secondary btn-sm" onclick="addReqDrug()" style="margin-bottom:10px;">+ Add Drug</button>
-      <div class="form-group"><label>Notes</label><textarea id="req-notes"></textarea></div>
+      <div style="font-weight:700;font-size:12px;margin-bottom:8px;color:var(--grey5);">Drug Entry Method</div>
+      <div class="em-tabs">
+        <button class="active" onclick="switchReqMode('table',this)">📋 Enter in Table</button>
+        <button onclick="switchReqMode('upload',this)">📂 Upload File</button>
+      </div>
+      <div id="req-mode-table" class="entry-panel active">
+        <table class="dit"><thead><tr><th>Drug Name</th><th>Quantity</th><th>Unit</th><th>Justification</th><th></th></tr></thead><tbody id="req-drug-body"></tbody></table>
+        <button class="btn btn-secondary btn-sm" onclick="addReqDrug()" style="margin-bottom:10px;">+ Add Drug</button>
+      </div>
+      <div id="req-mode-upload" class="entry-panel">
+        <div style="font-size:12px;color:var(--grey4);margin-bottom:10px;">Upload Excel (.xlsx/.csv) or Word (.docx). Required columns: <strong>Drug Name | Quantity | Unit | Justification</strong></div>
+        <div class="upload-zone" onclick="document.getElementById('req-file-upload').click()">
+          <div class="uz-icon">📋</div><p><strong>Click to upload</strong> requisition file</p><p>Excel (.xlsx/.csv) or Word (.docx)</p>
+        </div>
+        <input type="file" id="req-file-upload" accept=".xlsx,.xls,.csv,.docx" style="display:none" onchange="handleReqFileUpload(this)"/>
+        <div id="req-upload-result" style="margin-top:8px;font-size:12px;"></div>
+        <div id="req-upload-preview" style="margin-top:10px;display:none;">
+          <div style="font-weight:700;font-size:12px;color:var(--grey5);margin-bottom:6px;">Parsed drugs:</div>
+          <table class="dit"><thead><tr><th>Drug Name</th><th>Quantity</th><th>Unit</th><th>Justification</th></tr></thead><tbody id="req-upload-preview-body"></tbody></table>
+        </div>
+      </div>
+      <div class="form-group" style="margin-top:10px;"><label>Notes</label><textarea id="req-notes" placeholder="Additional notes…"></textarea></div>
     </div>
     <div class="modal-footer"><button class="btn btn-secondary" onclick="closeModal('modal-new-req')">Cancel</button><button class="btn btn-primary" onclick="submitRequisition()">Submit Requisition →</button></div>
   </div>
 </div>
 
-<!-- Upload Requisition (Pull modal) -->
-<div class="modal-overlay hidden" id="modal-upload-req">
-  <div class="modal">
-    <div class="modal-header"><h3>📎 Upload Requisition Document</h3><button class="modal-close" onclick="closeModal('modal-upload-req')">✕</button></div>
-    <div class="modal-body">
-      <p style="font-size:12px;color:var(--grey4);margin-bottom:12px;">Upload a requisition as <strong>Excel (.xlsx/.csv) or Word (.docx)</strong> with a table: Drug Name | Quantity | Unit | Justification. Creates a Pull requisition automatically.</p>
-      <div class="form-group" style="margin-bottom:12px;max-width:300px;">
-        <label>Requesting Department</label>
-        <select id="modal-upload-dept">
-          <option value="">Select…</option>
-          <option>GOPD Pharmacy</option><option>Accident &amp; Emergency</option>
-          <option>Presidential Wing</option><option>Theatre</option>
-          <option>Medical Ward</option><option>Surgical Ward</option><option>Maternity Ward</option>
-        </select>
-      </div>
-      <div class="upload-zone" onclick="document.getElementById('modal-req-file').click()">
-        <div class="icon">📋</div>
-        <p><strong>Click to upload</strong> requisition file</p>
-        <p>Excel (.xlsx/.csv) or Word (.docx) accepted</p>
-      </div>
-      <input type="file" id="modal-req-file" accept=".xlsx,.xls,.csv,.docx" style="display:none" onchange="handlePullUpload(this)"/>
-      <div id="modal-upload-result" style="margin-top:8px;"></div>
-    </div>
-    <div class="modal-footer"><button class="btn btn-primary" onclick="closeModal('modal-upload-req')">Done</button></div>
-  </div>
-</div>
-
-<!-- Requisition Details & HOD Action -->
 <div class="modal-overlay hidden" id="modal-req-detail">
-  <div class="modal">
-    <div class="modal-header"><h3>📥 Requisition Details &amp; Action</h3><button class="modal-close" onclick="closeModal('modal-req-detail')">✕</button></div>
+  <div class="modal"><div class="modal-header"><h3>📥 Requisition Detail &amp; Action</h3><button class="modal-close" onclick="closeModal('modal-req-detail')">✕</button></div>
     <div class="modal-body" id="req-detail-body"></div>
     <div class="modal-footer" id="req-detail-footer"></div>
   </div>
 </div>
 
-<!-- Expired Drug -->
 <div class="modal-overlay hidden" id="modal-expired">
-  <div class="modal">
-    <div class="modal-header"><h3>☠️ Record Expired Drug</h3><button class="modal-close" onclick="closeModal('modal-expired')">✕</button></div>
-    <div class="modal-body">
-      <div style="background:var(--amber-lt);border-left:3px solid var(--amber);padding:8px 12px;border-radius:5px;font-size:12px;margin-bottom:14px;">⚠️ This will be added to the official Expired Drug Register and flagged for condemnation.</div>
-      <div class="form-grid">
-        <div class="form-group"><label>Drug Name</label><input type="text" id="exp-drug"/></div>
-        <div class="form-group"><label>Batch No.</label><input type="text" id="exp-batch"/></div>
-        <div class="form-group"><label>Expiry Date</label><input type="date" id="exp-expiry"/></div>
-        <div class="form-group"><label>Qty Expired</label><input type="number" id="exp-qty"/></div>
-        <div class="form-group"><label>Date Detected</label><input type="date" id="exp-detected"/></div>
-        <div class="form-group"><label>Detected By</label><input type="text" id="exp-by"/></div>
-        <div class="form-group"><label>Status</label><select id="exp-status"><option>Pending Condemnation</option><option>Condemned</option><option>Disposed</option></select></div>
-        <div class="form-group"><label>Remarks</label><input type="text" id="exp-remarks"/></div>
-      </div>
-    </div>
+  <div class="modal"><div class="modal-header"><h3>☠️ Record Expired Drug</h3><button class="modal-close" onclick="closeModal('modal-expired')">✕</button></div>
+    <div class="modal-body"><div class="form-grid">
+      <div class="form-group"><label>Drug Name</label><input type="text" id="exp-drug"/></div>
+      <div class="form-group"><label>Batch No.</label><input type="text" id="exp-batch"/></div>
+      <div class="form-group"><label>Expiry Date</label><input type="date" id="exp-expiry"/></div>
+      <div class="form-group"><label>Qty Expired</label><input type="number" id="exp-qty"/></div>
+      <div class="form-group"><label>Date Detected</label><input type="date" id="exp-detected"/></div>
+      <div class="form-group"><label>Detected By</label><input type="text" id="exp-by"/></div>
+      <div class="form-group"><label>Status</label><select id="exp-status"><option>Pending Condemnation</option><option>Condemned</option><option>Disposed</option></select></div>
+      <div class="form-group"><label>Remarks</label><input type="text" id="exp-remarks"/></div>
+    </div></div>
     <div class="modal-footer"><button class="btn btn-secondary" onclick="closeModal('modal-expired')">Cancel</button><button class="btn btn-danger" onclick="recordExpired()">Record in Register</button></div>
   </div>
 </div>
 
-<!-- Procurement -->
 <div class="modal-overlay hidden" id="modal-procurement">
-  <div class="modal">
-    <div class="modal-header"><h3>📋 New Procurement Request</h3><button class="modal-close" onclick="closeModal('modal-procurement')">✕</button></div>
-    <div class="modal-body">
-      <div style="font-size:12px;color:var(--grey4);margin-bottom:12px;">AD Stores → HOD Pharmacy (CC) → CMAC → Permanent Secretary (bulk only)</div>
-      <div class="form-grid">
-        <div class="form-group"><label>Request No. (Auto)</label><input type="text" id="proc-no" readonly/></div>
-        <div class="form-group"><label>Date</label><input type="date" id="proc-date"/></div>
-        <div class="form-group"><label>Drug Name</label><input type="text" id="proc-drug"/></div>
-        <div class="form-group"><label>Source Required</label><select id="proc-source"><option>Contract</option><option>Stop Gap</option><option>Emergency</option><option>Regular</option></select></div>
-        <div class="form-group"><label>Qty Requested</label><input type="number" id="proc-qty"/></div>
-        <div class="form-group"><label>Unit</label><select id="proc-unit"><option>Packs</option><option>Bottles</option><option>Vials</option><option>Sachets</option><option>Bags</option></select></div>
-        <div class="form-group"><label>Current Stock</label><input type="number" id="proc-stock"/></div>
-        <div class="form-group"><label>Urgency</label><select id="proc-urgency"><option>Routine</option><option>Urgent</option><option>Emergency</option></select></div>
-        <div class="form-group"><label>Bulk Procurement?</label><select id="proc-bulk"><option>No — CMAC only</option><option>Yes — Perm. Sec. required</option></select></div>
-        <div class="form-group"><label>Clinical Justification</label><textarea id="proc-justification"></textarea></div>
-        <div class="form-group"><label>Suggested Supplier(s)</label><input type="text" id="proc-supplier"/></div>
-        <div class="form-group"><label>Initiated By</label><input type="text" id="proc-initiated-by"/></div>
-      </div>
-      <div style="font-size:11px;color:var(--grey4);">CC: HOD Pharmacy</div>
-    </div>
-    <div class="modal-footer"><button class="btn btn-secondary" onclick="closeModal('modal-procurement')">Cancel</button><button class="btn btn-primary" onclick="submitProcurement()">Submit to CMAC →</button></div>
+  <div class="modal"><div class="modal-header"><h3>📋 New Procurement Request</h3><button class="modal-close" onclick="closeModal('modal-procurement')">✕</button></div>
+    <div class="modal-body"><div class="form-grid">
+      <div class="form-group"><label>Request No. (Auto)</label><input type="text" id="proc-no" readonly/></div>
+      <div class="form-group"><label>Date</label><input type="date" id="proc-date"/></div>
+      <div class="form-group"><label>Drug Name</label><input type="text" id="proc-drug"/></div>
+      <div class="form-group"><label>Source</label><select id="proc-source"><option>Contract</option><option>Stop Gap</option><option>Emergency</option><option>Regular</option></select></div>
+      <div class="form-group"><label>Qty Requested</label><input type="number" id="proc-qty"/></div>
+      <div class="form-group"><label>Unit</label><select id="proc-unit"><option>Packs</option><option>Bottles</option><option>Vials</option><option>Sachets</option><option>Bags</option></select></div>
+      <div class="form-group"><label>Current Stock</label><input type="number" id="proc-stock"/></div>
+      <div class="form-group"><label>Urgency</label><select id="proc-urgency"><option>Routine</option><option>Urgent</option><option>Emergency</option></select></div>
+      <div class="form-group"><label>Bulk Procurement?</label><select id="proc-bulk"><option>No — CMAC only</option><option>Yes — Perm. Sec. required</option></select></div>
+      <div class="form-group"><label>Clinical Justification</label><textarea id="proc-justification"></textarea></div>
+      <div class="form-group"><label>Suggested Supplier(s)</label><input type="text" id="proc-supplier"/></div>
+      <div class="form-group"><label>Initiated By</label><input type="text" id="proc-initiated-by"/></div>
+    </div></div>
+    <div class="modal-footer"><button class="btn btn-secondary" onclick="closeModal('modal-procurement')">Cancel</button><button class="btn btn-primary" onclick="submitProcurement()">Submit →</button></div>
   </div>
 </div>
 
-<!-- Toast Container -->
 <div class="toast-container" id="toast-container"></div>
 
 <script>
-// ═══════════════════════════════════
-// STATE
-// ═══════════════════════════════════
-let state = {
-  role: 'ad_stores',
-  drugs: [],
-  sivs: [],
-  requisitions: [],
-  grnList: [],
-  expiredDrugs: [],
-  procurements: [],
-  alerts: [],
-  auditLog: [],
-  settings: { globalBuffer: 50, criticalDef: 'zero' },
-  sivCounter: 0,
-  reqCounter: 0,
-  procCounter: 0,
-  grnCounter: 0
-};
-
-// Load from localStorage
-function loadState() {
-  try {
-    const saved = localStorage.getItem('shmc_ims_v3');
-    if (saved) { const s = JSON.parse(saved); Object.assign(state, s); }
-  } catch(e) {}
-}
-function saveState() {
-  try { localStorage.setItem('shmc_ims_v3', JSON.stringify(state)); } catch(e) {}
-}
-loadState();
-
-const ROLES = {
-  ad_stores: 'AD, Stores',
-  hod_pharmacy: 'HOD Pharmacy',
-  dep_director: 'Dep. Director',
-  director: 'Director',
-  cmac: 'CMAC',
-  perm_sec: 'Perm. Secretary'
-};
-
-function isHOD() { return state.role === 'hod_pharmacy'; }
-
-// ═══════════════════════════════════
-// ROLE SWITCH
-// ═══════════════════════════════════
-function switchRole(role) {
-  state.role = role;
-  document.getElementById('roleBadgeTop').textContent = 'Role: ' + ROLES[role];
-  const hodBanner = document.getElementById('hod-banner');
-  const adBanner = document.getElementById('ad-banner');
-  if (isHOD()) {
-    hodBanner.classList.remove('hidden');
-    adBanner.style.display = 'none';
-  } else {
-    hodBanner.classList.add('hidden');
-    adBanner.style.display = '';
-  }
-  updateHODControls();
-  renderAll();
-  auditLog('Role Switch', `Switched to role: ${ROLES[role]}`);
-  saveState();
-}
-
-function updateHODControls() {
-  // Push HOD zone
-  const locked = document.getElementById('push-hod-locked');
-  const actions = document.getElementById('push-hod-actions');
-  if (isHOD()) {
-    locked.style.display = 'none';
-    actions.style.display = 'block';
-  } else {
-    locked.style.display = 'flex';
-    actions.style.display = 'none';
-  }
-}
-
-// ═══════════════════════════════════
-// NAV
-// ═══════════════════════════════════
-function showSection(id) {
-  document.querySelectorAll('.section').forEach(s => s.classList.remove('active'));
-  document.querySelectorAll('#sidebar nav a').forEach(a => a.classList.remove('active'));
-  document.getElementById('sec-' + id).classList.add('active');
-  const navLinks = document.querySelectorAll('#sidebar nav a');
-  navLinks.forEach(a => {
-    if (a.getAttribute('onclick') && a.getAttribute('onclick').includes("'" + id + "'")) a.classList.add('active');
-  });
-  renderAll();
-}
-
-function filterDept(dept) {
-  document.querySelectorAll('.dept-btns button').forEach(b => b.classList.remove('active'));
-  event.target.classList.add('active');
-}
-
-// ═══════════════════════════════════
-// CLOCK
-// ═══════════════════════════════════
-function updateClock() {
-  const now = new Date();
-  document.getElementById('clock').textContent = now.toLocaleTimeString('en-NG', {hour12: false});
-}
-setInterval(updateClock, 1000); updateClock();
-
-// ═══════════════════════════════════
-// MODAL
-// ═══════════════════════════════════
-function openModal(id) {
-  if (id === 'modal-new-req') initNewReq();
-  if (id === 'modal-procurement') initProcurement();
-  document.getElementById(id).classList.remove('hidden');
-}
-function closeModal(id) { document.getElementById(id).classList.add('hidden'); }
-document.addEventListener('click', e => {
-  if (e.target.classList.contains('modal-overlay')) {
-    e.target.classList.add('hidden');
-  }
-});
-
-// ═══════════════════════════════════
-// TOAST
-// ═══════════════════════════════════
-function toast(msg, type='info') {
-  const t = document.getElementById('toast-container');
-  const el = document.createElement('div');
-  el.className = `toast ${type}`;
-  const icons = {success:'✅', error:'❌', info:'ℹ️', warning:'⚠️'};
-  el.innerHTML = `<span>${icons[type]||'ℹ️'}</span><span>${msg}</span>`;
-  t.appendChild(el);
-  setTimeout(() => el.remove(), 4000);
-}
-
-// ═══════════════════════════════════
-// AUDIT
-// ═══════════════════════════════════
-function auditLog(action, detail) {
-  state.auditLog.unshift({
-    time: new Date().toLocaleString('en-NG'),
-    user: ROLES[state.role],
-    action, detail
-  });
-  if (state.auditLog.length > 200) state.auditLog.pop();
-  renderAudit();
-}
-
-// ═══════════════════════════════════
-// DRUG STATUS
-// ═══════════════════════════════════
-function getDrugStatus(d) {
-  const today = new Date(); today.setHours(0,0,0,0);
-  const exp = d.expiry ? new Date(d.expiry) : null;
-  if (exp && exp < today) return 'Expired';
-  const buf = d.bufferQty || state.settings.globalBuffer;
-  if (d.totalQty === 0) return 'Critical/Zero';
-  if (d.totalQty <= buf) return 'At Buffer';
-  return 'In Stock';
-}
-
-function getRowClass(status) {
-  return {Expired:'row-purple','Critical/Zero':'row-red','At Buffer':'row-amber','In Stock':'row-green'}[status]||'';
-}
-
-function getBadge(status) {
-  const m = {Expired:'badge-purple','Critical/Zero':'badge-red','At Buffer':'badge-amber','In Stock':'badge-green','Pending Review':'badge-amber','Pending HOD Approval':'badge-amber','HOD Approved':'badge-green','HOD Rejected':'badge-red','Issued':'badge-blue','Acknowledged':'badge-grey','Routine':'badge-grey','Urgent':'badge-amber','Emergency':'badge-red'};
-  return `<span class="badge ${m[status]||'badge-grey'}">${status}</span>`;
-}
-
-// ═══════════════════════════════════
-// GENERATE IDs
-// ═══════════════════════════════════
-function genSIV() {
-  const now = new Date();
-  state.sivCounter++;
-  return `SIV/Drugs/${now.getFullYear()}/${String(now.getMonth()+1).padStart(2,'0')}/${String(now.getDate()).padStart(2,'0')}/${String(state.sivCounter).padStart(3,'0')}`;
-}
-function genReqNo() { return `REQ/${new Date().getFullYear()}/${String(++state.reqCounter).padStart(4,'0')}`; }
-function genProcNo() { return `PROC/${new Date().getFullYear()}/${String(++state.procCounter).padStart(4,'0')}`; }
-function genGRN() { return `GRN/${new Date().getFullYear()}/${String(++state.grnCounter).padStart(4,'0')}`; }
-
-// ═══════════════════════════════════
-// RENDER ALL
-// ═══════════════════════════════════
-function renderAll() {
-  renderDashboard();
-  renderInventory();
-  renderRequisitions();
-  renderSIV();
-  renderExpired();
-  renderProcurement();
-  renderAudit();
-  renderAlerts();
-  updateAlertBadge();
-  updateHODControls();
-  updatePushSIVNo();
-}
-
-// ═══════════════════════════════════
-// DASHBOARD
-// ═══════════════════════════════════
-function renderDashboard() {
-  const statuses = state.drugs.map(d => getDrugStatus(d));
-  document.getElementById('d-total').textContent = state.drugs.length;
-  document.getElementById('d-critical').textContent = statuses.filter(s => s==='Critical/Zero').length;
-  document.getElementById('d-buffer').textContent = statuses.filter(s => s==='At Buffer').length;
-  document.getElementById('d-expired').textContent = statuses.filter(s => s==='Expired').length;
-  document.getElementById('d-pending').textContent = state.requisitions.filter(r => ['Pending Review','Pending HOD Approval'].includes(r.status)).length;
-
-  const crit = document.getElementById('dash-critical');
-  const critDrugs = state.drugs.filter(d => getDrugStatus(d) === 'Critical/Zero').slice(0,5);
-  crit.innerHTML = critDrugs.length ? critDrugs.map(d => `<div class="alert-item red"><div class="alert-text"><strong>${d.name}</strong> — ${d.totalQty} units</div></div>`).join('') : '<p style="color:var(--grey4);font-size:12px;">No critical drugs 🎉</p>';
-
-  const pendReqs = document.getElementById('dash-pending-reqs');
-  const pReqs = state.requisitions.filter(r => ['Pending Review','Pending HOD Approval'].includes(r.status)).slice(0,5);
-  pendReqs.innerHTML = pReqs.length ? pReqs.map(r => `<div class="alert-item amber"><div class="alert-text"><strong>${r.no}</strong> — ${r.dept} ${getBadge(r.status)}</div></div>`).join('') : '<p style="color:var(--grey4);font-size:12px;">No pending requisitions.</p>';
-
-  const recent = document.getElementById('dash-recent');
-  recent.innerHTML = state.auditLog.slice(0,8).map(a => `<div class="audit-row"><span class="audit-time">${a.time}</span><span class="audit-user">${a.user}</span><span class="audit-action">${a.action}: ${a.detail}</span></div>`).join('') || '<p style="color:var(--grey4);font-size:12px;">No activity yet.</p>';
-}
-
-// ═══════════════════════════════════
-// INVENTORY
-// ═══════════════════════════════════
-function renderInventory() {
-  const filterStatus = document.getElementById('inv-filter-status')?.value || '';
-  const filterSource = document.getElementById('inv-filter-source')?.value || '';
-  const search = (document.getElementById('inv-search')?.value || '').toLowerCase();
-  const body = document.getElementById('inv-body');
-  if (!body) return;
-  const filtered = state.drugs.filter(d => {
-    const status = getDrugStatus(d);
-    if (filterStatus && status !== filterStatus) return false;
-    if (filterSource && d.source !== filterSource) return false;
-    if (search && !d.name.toLowerCase().includes(search)) return false;
-    return true;
-  });
-  body.innerHTML = filtered.length ? filtered.map((d, i) => {
-    const status = getDrugStatus(d);
-    return `<tr class="${getRowClass(status)}">
-      <td><strong>${d.name}</strong></td><td>${d.source}</td><td>${d.packSize}</td>
-      <td>${d.qtyOnHand}</td><td>${d.totalQty}</td><td>${d.bufferQty||state.settings.globalBuffer}</td>
-      <td>${d.expiry||'—'}</td><td>${getBadge(status)}</td>
-      <td><button class="btn btn-danger btn-sm" onclick="removeDrug(${i})">Remove</button></td>
-    </tr>`;
-  }).join('') : '<tr><td colspan="9" style="text-align:center;color:var(--grey4);padding:20px;">No drugs found.</td></tr>';
-}
-
-function addDrug() {
-  const name = document.getElementById('ad-name').value.trim();
-  if (!name) { toast('Drug name required','error'); return; }
-  const packSize = parseInt(document.getElementById('ad-packsize').value) || 1;
-  const qty = parseInt(document.getElementById('ad-qty').value) || 0;
-  state.drugs.push({
-    name, source: document.getElementById('ad-source').value,
-    packSize, qtyOnHand: qty, totalQty: qty * packSize,
-    bufferQty: parseInt(document.getElementById('ad-buffer').value)||0,
-    expiry: document.getElementById('ad-expiry').value,
-    batch: document.getElementById('ad-batch').value
-  });
-  saveState(); auditLog('Add Drug', name); renderAll();
-  closeModal('modal-add-drug'); toast(`${name} added to inventory`,'success');
-  document.getElementById('ad-name').value=''; document.getElementById('ad-qty').value='';
-}
-
-function removeDrug(i) {
-  if (!confirm('Remove this drug?')) return;
-  auditLog('Remove Drug', state.drugs[i].name);
-  state.drugs.splice(i,1); saveState(); renderAll();
-  toast('Drug removed','info');
-}
-
-function calcAddDrugTotal() {
-  const ps = parseInt(document.getElementById('ad-packsize').value)||1;
-  const qty = parseInt(document.getElementById('ad-qty').value)||0;
-  document.getElementById('ad-total').value = qty * ps;
-}
-
-// ═══════════════════════════════════
-// PUSH — ISSUE DRUGS
-// ═══════════════════════════════════
-let pushDrugRows = [];
-
-function updatePushSIVNo() {
-  const now = new Date();
-  const next = state.sivCounter + 1;
-  document.getElementById('push-siv-no').textContent = `SIV/Drugs/${now.getFullYear()}/${String(now.getMonth()+1).padStart(2,'0')}/${String(now.getDate()).padStart(2,'0')}/${String(next).padStart(3,'0')}`;
-}
-
-function addPushDrug(name='', packSize='', qty='') {
-  const id = Date.now() + Math.random();
-  pushDrugRows.push(id);
-  const body = document.getElementById('push-drug-body');
-  const tr = document.createElement('tr');
-  tr.id = 'push-row-' + id;
-  tr.innerHTML = `
-    <td><input type="text" placeholder="Drug name" value="${name}" onchange="updatePushTotal(this)"/></td>
-    <td><select onchange="updatePushTotal(this)"><option>1</option><option>5</option><option>10</option><option>12</option><option>14</option><option>20</option><option>24</option><option>28</option><option>30</option><option>50</option><option>60</option><option>100</option></select></td>
-    <td><input type="number" min="1" value="${qty||1}" oninput="updatePushTotal(this)"/></td>
-    <td><input type="text" readonly value="${qty && packSize ? qty*packSize : packSize||1}" style="background:var(--grey1)"/></td>
-    <td><select><option>Packs</option><option>Vials</option><option>Bottles</option><option>Sachets</option></select></td>
-    <td><button class="btn btn-danger btn-sm" onclick="removePushRow('${id}')">✕</button></td>`;
-  if (packSize) tr.querySelector('select').value = packSize;
-  body.appendChild(tr);
-}
-
-function updatePushTotal(el) {
-  const row = el.closest('tr');
-  const ps = parseInt(row.querySelectorAll('select')[0].value)||1;
-  const qty = parseInt(row.querySelectorAll('input[type=number]')[0].value)||0;
-  row.querySelectorAll('input[readonly]')[0].value = ps * qty;
-}
-
-function removePushRow(id) {
-  document.getElementById('push-row-' + id)?.remove();
-  pushDrugRows = pushDrugRows.filter(r => r != id);
-}
-
-function resetPushForm() {
-  document.getElementById('push-dept').value = '';
-  document.getElementById('push-issued-by').value = '';
-  document.getElementById('push-received-by').value = '';
-  document.getElementById('push-remarks').value = '';
-  document.getElementById('push-hod-comment').value = '';
-  document.getElementById('push-drug-body').innerHTML = '';
-  pushDrugRows = [];
-  updatePushSIVNo();
-}
-
-function collectPushDrugs() {
-  const rows = document.querySelectorAll('#push-drug-body tr');
-  return Array.from(rows).map(r => {
-    const inputs = r.querySelectorAll('input');
-    const selects = r.querySelectorAll('select');
-    return {
-      name: inputs[0].value, packSize: selects[0].value,
-      qty: inputs[1].value, totalUnits: inputs[2].value, unit: selects[1].value
-    };
-  }).filter(d => d.name.trim());
-}
-
-function savePushDraft() {
-  const dept = document.getElementById('push-dept').value;
-  if (!dept) { toast('Select a destination department','error'); return; }
-  const drugs = collectPushDrugs();
-  if (!drugs.length) { toast('Add at least one drug','error'); return; }
-
-  // Save as a pending Push requisition awaiting HOD approval
-  const req = {
-    no: genReqNo(), dept, flow:'push',
-    drugs, source: document.getElementById('push-source').value,
-    date: document.getElementById('push-date').value || new Date().toISOString().split('T')[0],
-    issuedBy: document.getElementById('push-issued-by').value,
-    receivedBy: document.getElementById('push-received-by').value,
-    remarks: document.getElementById('push-remarks').value,
-    status: 'Pending HOD Approval', urgency: 'Routine', siv: null
-  };
-  state.requisitions.push(req);
-  addAlert('amber', `Push issuance to ${dept} requires HOD Pharmacy approval — ${req.no}`);
-  saveState(); renderAll();
-  toast(`Draft saved as ${req.no} — awaiting HOD Pharmacy approval`, 'info');
-  auditLog('Push Draft Saved', `${req.no} to ${dept}`);
-}
-
-function hodApprovePush() {
-  if (!isHOD()) { toast('Only HOD Pharmacy can approve issuances','error'); return; }
-  const dept = document.getElementById('push-dept').value;
-  if (!dept) { toast('Select a destination department','error'); return; }
-  const drugs = collectPushDrugs();
-  if (!drugs.length) { toast('Add at least one drug','error'); return; }
-  const comment = document.getElementById('push-hod-comment').value;
-  const sivNo = genSIV();
-  const siv = {
-    no: sivNo, dept, drugs,
-    source: document.getElementById('push-source').value,
-    issuedBy: document.getElementById('push-issued-by').value,
-    approvedBy: ROLES[state.role],
-    hodComment: comment,
-    date: document.getElementById('push-date').value || new Date().toISOString().split('T')[0],
-    flow: 'Push', remarks: document.getElementById('push-remarks').value
-  };
-  state.sivs.push(siv);
-  // Deduct stock
-  drugs.forEach(d => {
-    const drug = state.drugs.find(x => x.name.toLowerCase() === d.name.toLowerCase());
-    if (drug) { drug.totalQty = Math.max(0, drug.totalQty - parseInt(d.totalUnits||0)); drug.qtyOnHand = Math.ceil(drug.totalQty / drug.packSize); }
-  });
-  addAlert('info', `SIV ${sivNo} issued to ${dept} — approved by HOD Pharmacy`);
-  auditLog('HOD Approved Push', `${sivNo} → ${dept}${comment ? ' | Comment: '+comment : ''}`);
-  renderPushTodaySIVs();
-  saveState(); renderAll();
-  toast(`✅ SIV ${sivNo} posted — approved by HOD Pharmacy`, 'success');
-  resetPushForm();
-}
-
-function hodRejectPush() {
-  if (!isHOD()) { toast('Only HOD Pharmacy can reject','error'); return; }
-  const dept = document.getElementById('push-dept').value || 'Unknown';
-  const comment = document.getElementById('push-hod-comment').value;
-  toast(`Issuance to ${dept} rejected by HOD Pharmacy`, 'warning');
-  auditLog('HOD Rejected Push', `To ${dept}${comment ? ' | Reason: '+comment : ''}`);
-  addAlert('amber', `Push issuance to ${dept} rejected by HOD Pharmacy`);
-  saveState(); renderAll();
-}
-
-function renderPushTodaySIVs() {
-  const today = new Date().toISOString().split('T')[0];
-  const todaySIVs = state.sivs.filter(s => s.date === today && s.flow === 'Push');
-  const el = document.getElementById('push-today-sivs');
-  if (!el) return;
-  el.innerHTML = todaySIVs.length ? todaySIVs.map(s => `<div class="alert-item" style="background:var(--green-lt);border-left:4px solid var(--green);">
-    <div class="alert-text"><strong>${s.no}</strong> → ${s.dept} | ${s.drugs.map(d=>d.name).join(', ')} | Approved by: ${s.approvedBy}</div>
-    <span class="badge badge-green">Issued</span>
-  </div>`).join('') : '<p style="color:var(--grey4);font-size:12px;">None yet today.</p>';
-}
-
-// Push Upload
-function handlePushUpload(input) {
-  const file = input.files[0]; if (!file) return;
-  const resultEl = document.getElementById('push-upload-result');
-  resultEl.innerHTML = '<span style="color:var(--teal);">⏳ Parsing file…</span>';
-  parseReqFile(file, (rows) => {
-    if (!rows.length) { resultEl.innerHTML = '<span style="color:var(--red);">No drug rows found.</span>'; return; }
-    document.getElementById('push-drug-body').innerHTML = '';
-    pushDrugRows = [];
-    rows.forEach(r => addPushDrug(r.name, r.packSize||'', r.qty||''));
-    resultEl.innerHTML = `<span style="color:var(--green);">✅ ${rows.length} drug(s) pre-filled from file.</span>`;
-    toast(`${rows.length} drugs pre-filled in Push form`, 'success');
-  });
-}
-
-// ═══════════════════════════════════
-// PULL — REQUISITIONS
-// ═══════════════════════════════════
-let reqDrugRows = [];
-
-function initNewReq() {
-  document.getElementById('req-no').value = 'REQ/' + new Date().getFullYear() + '/' + String(state.reqCounter + 1).padStart(4,'0');
-  document.getElementById('req-date').value = new Date().toISOString().split('T')[0];
-  document.getElementById('req-drug-body').innerHTML = '';
-  reqDrugRows = [];
-  addReqDrug();
-}
-
-function addReqDrug(name='', qty='') {
-  const id = Date.now() + Math.random();
-  reqDrugRows.push(id);
-  const body = document.getElementById('req-drug-body');
-  const tr = document.createElement('tr');
-  tr.id = 'req-row-' + id;
-  tr.innerHTML = `
-    <td><input type="text" placeholder="Drug name" value="${name}"/></td>
-    <td><input type="number" min="1" value="${qty||1}"/></td>
-    <td><select><option>1</option><option>10</option><option>12</option><option>20</option><option>28</option><option>30</option><option>50</option><option>100</option></select></td>
-    <td><select><option>Packs</option><option>Vials</option><option>Bottles</option><option>Sachets</option></select></td>
-    <td><input type="text" placeholder="Justification"/></td>
-    <td><button class="btn btn-danger btn-sm" onclick="removeReqRow('${id}')">✕</button></td>`;
-  body.appendChild(tr);
-}
-
-function removeReqRow(id) {
-  document.getElementById('req-row-' + id)?.remove();
-  reqDrugRows = reqDrugRows.filter(r => r != id);
-}
-
-function submitRequisition() {
-  const dept = document.getElementById('req-dept').value;
-  if (!dept) { toast('Select requesting department','error'); return; }
-  const rows = document.querySelectorAll('#req-drug-body tr');
-  const drugs = Array.from(rows).map(r => {
-    const inputs = r.querySelectorAll('input');
-    const selects = r.querySelectorAll('select');
-    return { name: inputs[0].value, qty: inputs[1].value, packSize: selects[0].value, unit: selects[1].value, justification: inputs[2].value };
-  }).filter(d => d.name.trim());
-  if (!drugs.length) { toast('Add at least one drug','error'); return; }
-
-  const req = {
-    no: genReqNo(), dept, drugs, flow: 'pull',
-    urgency: document.getElementById('req-urgency').value,
-    requestedBy: document.getElementById('req-by').value,
-    notes: document.getElementById('req-notes').value,
-    date: document.getElementById('req-date').value,
-    status: 'Pending Review', siv: null, hodComment: '', adComment: ''
-  };
-  state.requisitions.push(req);
-  addAlert('amber', `New Pull requisition ${req.no} from ${dept} — pending AD review`);
-  auditLog('Requisition Submitted', `${req.no} from ${dept}`);
-  saveState(); renderAll();
-  closeModal('modal-new-req');
-  toast(`Requisition ${req.no} submitted`, 'success');
-}
-
-function renderRequisitions() {
-  const filterDept = document.getElementById('pull-filter-dept')?.value||'';
-  const filterStatus = document.getElementById('pull-filter-status')?.value||'';
-  const body = document.getElementById('pull-body');
-  if (!body) return;
-  const filtered = state.requisitions.filter(r => {
-    if (filterDept && r.dept !== filterDept) return false;
-    if (filterStatus && r.status !== filterStatus) return false;
-    return true;
-  });
-  body.innerHTML = filtered.length ? filtered.map((r, i) => {
-    const idx = state.requisitions.indexOf(r);
-    const drugNames = r.drugs.map(d=>d.name).join(', ').substring(0, 40) + (r.drugs.length > 2 ? '…' : '');
-    const canHodAction = isHOD() && r.status === 'Pending HOD Approval';
-    const canADReview = !isHOD() && r.status === 'Pending Review';
-    let action = '';
-    if (canADReview) action = `<button class="btn btn-amber btn-sm" onclick="adReviewReq(${idx})">Review</button>`;
-    else if (canHodAction) action = `<button class="btn btn-hod btn-sm" onclick="openHODApproval(${idx})">HOD Approve</button>`;
-    else action = `<button class="btn btn-secondary btn-sm" onclick="viewReq(${idx})">View</button>`;
-    return `<tr>
-      <td><strong>${r.no}</strong></td><td>${r.dept}</td><td>${drugNames}</td>
-      <td>${getBadge(r.urgency)}</td><td>${r.date}</td><td>${getBadge(r.status)}</td>
-      <td>${r.siv ? `<span class="badge badge-blue">${r.siv}</span>` : '—'}</td>
-      <td>${action}</td></tr>`;
-  }).join('') : '<tr><td colspan="8" style="text-align:center;color:var(--grey4);padding:20px;">No requisitions found.</td></tr>';
-}
-
-function adReviewReq(idx) {
-  const req = state.requisitions[idx];
-  if (!req) return;
-  req.status = 'Pending HOD Approval';
-  addAlert('info', `Requisition ${req.no} reviewed by AD — forwarded to HOD Pharmacy for approval`);
-  auditLog('AD Reviewed Req', `${req.no} → forwarded to HOD Pharmacy`);
-  saveState(); renderAll();
-  toast(`${req.no} forwarded to HOD Pharmacy for approval`, 'info');
-}
-
-function openHODApproval(idx) {
-  if (!isHOD()) { toast('Only HOD Pharmacy can approve requisitions','error'); return; }
-  const req = state.requisitions[idx];
-  if (!req) return;
-  const body = document.getElementById('req-detail-body');
-  body.innerHTML = `
-    <div style="margin-bottom:12px;">
-      <strong>${req.no}</strong> · ${req.dept} · ${getBadge(req.urgency)} · ${req.date}
-    </div>
-    <table class="drug-items-table">
-      <thead><tr><th>Drug</th><th>Qty</th><th>Pack Size</th><th>Unit</th><th>Justification</th></tr></thead>
-      <tbody>${req.drugs.map(d=>`<tr><td>${d.name}</td><td>${d.qty}</td><td>${d.packSize||'—'}</td><td>${d.unit||'—'}</td><td>${d.justification||'—'}</td></tr>`).join('')}</tbody>
-    </table>
-    ${req.notes ? `<p style="font-size:12px;margin-top:8px;color:var(--grey4);">Notes: ${req.notes}</p>` : ''}
-    <div class="hod-approval-zone" style="margin-top:14px;">
-      <h4>🔐 HOD Pharmacy Decision</h4>
-      <div class="form-group"><label>HOD Comments</label><textarea id="hod-comment-${idx}" placeholder="Approval/rejection comments…"></textarea></div>
-    </div>`;
-  const footer = document.getElementById('req-detail-footer');
-  footer.innerHTML = `
-    <button class="btn btn-secondary" onclick="closeModal('modal-req-detail')">Close</button>
-    <button class="btn btn-danger" onclick="hodRejectReq(${idx})">❌ Reject</button>
-    <button class="btn btn-hod" onclick="hodApproveReq(${idx})">✅ Approve &amp; Issue SIV</button>`;
-  openModal('modal-req-detail');
-}
-
-function hodApproveReq(idx) {
-  if (!isHOD()) { toast('Only HOD Pharmacy can approve','error'); return; }
-  const req = state.requisitions[idx];
-  const comment = document.getElementById(`hod-comment-${idx}`)?.value || '';
-  const sivNo = genSIV();
-  req.status = 'Issued'; req.siv = sivNo; req.hodComment = comment;
-  state.sivs.push({
-    no: sivNo, dept: req.dept, drugs: req.drugs, flow: 'Pull',
-    source: 'Contract', issuedBy: 'AD, Stores',
-    approvedBy: ROLES[state.role], hodComment: comment,
-    date: new Date().toISOString().split('T')[0], remarks: ''
-  });
-  req.drugs.forEach(d => {
-    const drug = state.drugs.find(x => x.name.toLowerCase() === d.name.toLowerCase());
-    if (drug) { const units = (parseInt(d.qty)||0)*(parseInt(d.packSize)||1); drug.totalQty = Math.max(0, drug.totalQty - units); drug.qtyOnHand = Math.ceil(drug.totalQty/drug.packSize); }
-  });
-  addAlert('info', `SIV ${sivNo} issued — Pull requisition ${req.no} approved by HOD Pharmacy`);
-  auditLog('HOD Approved Pull Req', `${req.no} → SIV ${sivNo}${comment?' | '+comment:''}`);
-  saveState(); renderAll();
-  closeModal('modal-req-detail');
-  toast(`✅ Requisition ${req.no} approved — SIV ${sivNo} issued`, 'success');
-}
-
-function hodRejectReq(idx) {
-  if (!isHOD()) return;
-  const req = state.requisitions[idx];
-  const comment = document.getElementById(`hod-comment-${idx}`)?.value || '';
-  req.status = 'HOD Rejected'; req.hodComment = comment;
-  addAlert('amber', `Requisition ${req.no} from ${req.dept} rejected by HOD Pharmacy`);
-  auditLog('HOD Rejected Pull Req', `${req.no}${comment?' | Reason: '+comment:''}`);
-  saveState(); renderAll();
-  closeModal('modal-req-detail');
-  toast(`Requisition ${req.no} rejected by HOD Pharmacy`, 'warning');
-}
-
-function viewReq(idx) {
-  const req = state.requisitions[idx];
-  if (!req) return;
-  const body = document.getElementById('req-detail-body');
-  body.innerHTML = `
-    <div style="margin-bottom:12px;"><strong>${req.no}</strong> · ${req.dept} · ${getBadge(req.urgency)} · ${req.date} · ${getBadge(req.status)}</div>
-    <table class="drug-items-table">
-      <thead><tr><th>Drug</th><th>Qty</th><th>Pack Size</th><th>Unit</th><th>Justification</th></tr></thead>
-      <tbody>${req.drugs.map(d=>`<tr><td>${d.name}</td><td>${d.qty}</td><td>${d.packSize||'—'}</td><td>${d.unit||'—'}</td><td>${d.justification||'—'}</td></tr>`).join('')}</tbody>
-    </table>
-    ${req.siv ? `<p style="margin-top:10px;font-size:12px;">SIV: <strong>${req.siv}</strong></p>` : ''}
-    ${req.hodComment ? `<p style="margin-top:6px;font-size:12px;color:var(--grey4);">HOD Comment: ${req.hodComment}</p>` : ''}`;
-  document.getElementById('req-detail-footer').innerHTML = `<button class="btn btn-secondary" onclick="closeModal('modal-req-detail')">Close</button>`;
-  openModal('modal-req-detail');
-}
-
-// ═══════════════════════════════════
-// UPLOAD REQUISITION (Pull modal & Import page)
-// ═══════════════════════════════════
-function handlePullUpload(input) {
-  const file = input.files[0]; if (!file) return;
-  const dept = document.getElementById('modal-upload-dept').value;
-  if (!dept) { toast('Select requesting department first','error'); return; }
-  const resultEl = document.getElementById('modal-upload-result');
-  resultEl.innerHTML = '<span style="color:var(--teal);">⏳ Parsing file…</span>';
-  parseReqFile(file, (rows) => {
-    if (!rows.length) { resultEl.innerHTML='<span style="color:var(--red);">No drug rows found.</span>'; return; }
-    const req = {
-      no: genReqNo(), dept, drugs: rows.map(r=>({name:r.name, qty:r.qty||1, packSize:r.packSize||1, unit:r.unit||'Packs', justification:r.justification||''})),
-      urgency: 'Routine', requestedBy: 'Upload', notes: `Imported from file: ${file.name}`,
-      date: new Date().toISOString().split('T')[0], status:'Pending Review', siv:null, flow:'pull', hodComment:''
-    };
-    state.requisitions.push(req);
-    addAlert('amber', `Uploaded Pull requisition ${req.no} from ${dept} — pending AD review`);
-    auditLog('Upload Pull Req', `${req.no} from ${dept} (${file.name})`);
-    saveState(); renderAll();
-    resultEl.innerHTML = `<span style="color:var(--green);">✅ Requisition ${req.no} created from ${rows.length} drug(s).</span>`;
-    toast(`Requisition ${req.no} created from upload`, 'success');
-  });
-}
-
-function handleReqImport(input) {
-  const file = input.files[0]; if (!file) return;
-  const dept = document.getElementById('import-req-dept').value;
-  if (!dept) { toast('Select requesting department first','error'); return; }
-  const route = document.getElementById('import-req-route').value;
-  const resultEl = document.getElementById('req-import-result');
-  resultEl.innerHTML = '<span style="color:var(--teal);">⏳ Parsing…</span>';
-  parseReqFile(file, (rows) => {
-    if (!rows.length) { resultEl.innerHTML='<span style="color:var(--red);">No drug rows found.</span>'; return; }
-    if (route === 'pull') {
-      const req = {
-        no: genReqNo(), dept, drugs: rows.map(r=>({name:r.name,qty:r.qty||1,packSize:r.packSize||1,unit:r.unit||'Packs',justification:r.justification||''})),
-        urgency:'Routine', requestedBy:'Import', notes:`Imported: ${file.name}`,
-        date: new Date().toISOString().split('T')[0], status:'Pending Review', siv:null, flow:'pull', hodComment:''
-      };
-      state.requisitions.push(req);
-      addAlert('amber',`Imported Pull req ${req.no} from ${dept}`);
-      auditLog('Import Pull Req',`${req.no} from ${dept}`);
-      saveState(); renderAll();
-      resultEl.innerHTML=`<span style="color:var(--green);">✅ Pull Requisition <strong>${req.no}</strong> created (${rows.length} drugs). Awaiting AD review then HOD approval.</span>`;
-      toast(`Pull Req ${req.no} created`,'success');
-    } else {
-      // Push route — pre-fill Push form
-      document.getElementById('push-dept').value = dept;
-      document.getElementById('push-drug-body').innerHTML='';
-      pushDrugRows=[];
-      rows.forEach(r=>addPushDrug(r.name,r.packSize||'',r.qty||''));
-      resultEl.innerHTML=`<span style="color:var(--green);">✅ ${rows.length} drug(s) pre-filled in Push (Issue) form. Go to Issue Drugs (Push) section.</span>`;
-      toast(`${rows.length} drugs pre-filled in Push form`,'success');
-      auditLog('Import Push Pre-fill',`${rows.length} drugs from ${file.name}`);
-    }
-  });
-}
-
-// ═══════════════════════════════════
-// FILE PARSER (XLSX / CSV / DOCX)
-// ═══════════════════════════════════
-function parseReqFile(file, callback) {
-  const name = file.name.toLowerCase();
-  if (name.endsWith('.docx')) {
-    // Simple DOCX text extraction — look for table rows
-    const reader = new FileReader();
-    reader.onload = e => {
-      try {
-        const text = new TextDecoder().decode(new Uint8Array(e.target.result));
-        // Extract text between <w:t> tags
-        const matches = [...text.matchAll(/<w:t[^>]*>([^<]+)<\/w:t>/g)].map(m=>m[1]);
-        const rows = parseTextRowsToReq(matches);
-        callback(rows);
-      } catch(err) { callback([]); }
-    };
-    reader.readAsArrayBuffer(file);
-  } else {
-    // Excel / CSV
-    const reader = new FileReader();
-    reader.onload = e => {
-      try {
-        const wb = XLSX.read(new Uint8Array(e.target.result), {type:'array'});
-        const ws = wb.Sheets[wb.SheetNames[0]];
-        const data = XLSX.utils.sheet_to_json(ws, {header:1, defval:''});
-        const rows = [];
-        for (let i = 1; i < data.length; i++) {
-          const row = data[i];
-          const drugName = (row[0]||'').toString().trim();
-          if (!drugName || drugName.toLowerCase().includes('drug')) continue;
-          rows.push({
-            name: drugName,
-            qty: parseInt(row[1]) || 1,
-            packSize: parseInt(row[2]) || 1,
-            unit: (row[3]||'Packs').toString().trim(),
-            justification: (row[4]||'').toString().trim()
-          });
-        }
-        callback(rows);
-      } catch(err) { callback([]); }
-    };
-    reader.readAsArrayBuffer(file);
-  }
-}
-
-function parseTextRowsToReq(tokens) {
-  // Group tokens into rows of 3-5, skip header-like rows
-  const rows = [];
-  let i = 0;
-  while (i < tokens.length) {
-    const t = tokens[i].trim();
-    if (t && !/^(drug|item|name|qty|quantity|unit|justification)/i.test(t)) {
-      const qty = parseInt(tokens[i+1]) || 1;
-      rows.push({ name: t, qty, packSize: parseInt(tokens[i+2])||1, unit: tokens[i+3]||'Packs', justification: tokens[i+4]||'' });
-      i += 5;
-    } else { i++; }
-  }
-  return rows;
-}
-
-// ═══════════════════════════════════
-// SIV REGISTER
-// ═══════════════════════════════════
-function renderSIV() {
-  const body = document.getElementById('siv-body');
-  if (!body) return;
-  body.innerHTML = state.sivs.length ? state.sivs.map(s => `<tr>
-    <td><strong>${s.no}</strong></td><td>${s.dept}</td>
-    <td>${s.drugs.map(d=>d.name).join(', ')}</td>
-    <td>${s.drugs.reduce((a,d)=>a+(parseInt(d.totalUnits||d.qty||0)),0)}</td>
-    <td>${s.source||'—'}</td><td>${s.approvedBy||'—'}</td><td>${s.issuedBy||'—'}</td>
-    <td>${s.date}</td><td><span class="badge badge-${s.flow==='Push'?'blue':'green'}">${s.flow}</span></td>
-    <td><button class="btn btn-secondary btn-sm" onclick="printSIV('${s.no}')">🖨</button></td>
-  </tr>`).join('') : '<tr><td colspan="10" style="text-align:center;color:var(--grey4);padding:20px;">No SIVs yet.</td></tr>';
-}
-
-function printSIV(no) { toast(`Print SIV ${no} — (connect printer)`, 'info'); }
-function exportSIV() { toast('SIV export initiated','info'); }
-
-// ═══════════════════════════════════
-// RECEIVE STOCK (GRN)
-// ═══════════════════════════════════
-function calcGRNTotal() {
-  const ps = parseInt(document.getElementById('grn-packsize').value)||1;
-  const qty = parseInt(document.getElementById('grn-qty').value)||0;
-  document.getElementById('grn-total').value = ps * qty;
-}
-
-function postGRN() {
-  const drug = document.getElementById('grn-drug').value.trim();
-  if (!drug) { toast('Drug name required','error'); return; }
-  const ps = parseInt(document.getElementById('grn-packsize').value)||1;
-  const qty = parseInt(document.getElementById('grn-qty').value)||0;
-  const total = ps * qty;
-  const expiry = document.getElementById('grn-expiry').value;
-  const grn = {
-    no: document.getElementById('grn-no').value || genGRN(),
-    drug, packSize:ps, qtyPacks:qty, totalUnits:total,
-    source:document.getElementById('grn-source').value,
-    supplier:document.getElementById('grn-supplier').value,
-    batch:document.getElementById('grn-batch').value,
-    cost:document.getElementById('grn-cost').value,
-    mfg:document.getElementById('grn-mfg').value,
-    expiry, location:document.getElementById('grn-location').value,
-    remarks:document.getElementById('grn-remarks').value,
-    date:document.getElementById('grn-date').value||new Date().toISOString().split('T')[0],
-    receivedBy: ROLES[state.role]
-  };
-  state.grnList.unshift(grn);
-  // Add/update drug in inventory
-  const existing = state.drugs.find(d => d.name.toLowerCase() === drug.toLowerCase());
-  if (existing) {
-    existing.totalQty += total; existing.qtyOnHand = Math.ceil(existing.totalQty/existing.packSize);
-    if (expiry) existing.expiry = expiry;
-  } else {
-    state.drugs.push({ name:drug, source:grn.source, packSize:ps, qtyOnHand:qty, totalQty:total, bufferQty:parseInt(document.getElementById('grn-buffer').value)||0, expiry, batch:grn.batch });
-  }
-  addAlert('info', `GRN: ${total} units of ${drug} received`);
-  auditLog('GRN Posted', `${grn.no}: ${qty} packs of ${drug}`);
-  saveState(); renderAll(); renderGRNList();
-  toast(`GRN posted — ${total} units of ${drug}`, 'success');
-}
-
-function resetGRN() {
-  ['grn-no','grn-drug','grn-qty','grn-total','grn-batch','grn-cost','grn-remarks'].forEach(id => { const el=document.getElementById(id); if(el) el.value=''; });
-}
-
-function renderGRNList() {
-  const el = document.getElementById('grn-list');
-  if (!el) return;
-  el.innerHTML = state.grnList.slice(0,10).map(g => `<div class="alert-item" style="background:var(--green-lt);border-left:4px solid var(--green);">
-    <div class="alert-text"><strong>${g.no}</strong> · ${g.drug} · ${g.totalUnits} units · ${g.date}</div>
-    <span class="badge badge-green">${g.source}</span>
-  </div>`).join('') || '<p style="color:var(--grey4);font-size:12px;">No GRNs yet.</p>';
-}
-
-// ═══════════════════════════════════
-// STOCK IMPORT
-// ═══════════════════════════════════
-function handleStockImport(input) {
-  const file = input.files[0]; if (!file) return;
-  const resultEl = document.getElementById('stock-import-result');
-  resultEl.innerHTML = '<span style="color:var(--teal);">⏳ Parsing…</span>';
-  const reader = new FileReader();
-  reader.onload = e => {
-    try {
-      const wb = XLSX.read(new Uint8Array(e.target.result), {type:'array'});
-      const ws = wb.Sheets[wb.SheetNames[0]];
-      const data = XLSX.utils.sheet_to_json(ws, {header:1, defval:''});
-      let count = 0;
-      for (let i = 1; i < data.length; i++) {
-        const row = data[i];
-        const name = (row[2]||'').toString().trim(); // Column C
-        if (!name) continue;
-        const expiry = row[3] ? row[3].toString().trim() : '';
-        const stockAtHand = parseInt(row[10])||parseInt(row[4])||0;
-        const existing = state.drugs.find(d => d.name.toLowerCase()===name.toLowerCase());
-        if (existing) { existing.totalQty=stockAtHand; if(expiry)existing.expiry=expiry; }
-        else { state.drugs.push({name,source:'Contract',packSize:1,qtyOnHand:stockAtHand,totalQty:stockAtHand,bufferQty:0,expiry,batch:''}); }
-        count++;
-      }
-      auditLog('Stock Import', `${count} drugs imported from ${file.name}`);
-      saveState(); renderAll();
-      resultEl.innerHTML = `<span style="color:var(--green);">✅ ${count} drug lines imported.</span>`;
-      toast(`${count} drugs imported`, 'success');
-    } catch(err) {
-      resultEl.innerHTML = `<span style="color:var(--red);">Error parsing file: ${err.message}</span>`;
-    }
-  };
-  reader.readAsArrayBuffer(file);
-}
-
-// ═══════════════════════════════════
-// EXPIRED DRUGS
-// ═══════════════════════════════════
-function recordExpired() {
-  const drug = document.getElementById('exp-drug').value.trim();
-  if (!drug) { toast('Drug name required','error'); return; }
-  const rec = {
-    drug, batch:document.getElementById('exp-batch').value,
-    expiry:document.getElementById('exp-expiry').value,
-    qty:document.getElementById('exp-qty').value,
-    detected:document.getElementById('exp-detected').value,
-    by:document.getElementById('exp-by').value,
-    status:document.getElementById('exp-status').value,
-    remarks:document.getElementById('exp-remarks').value
-  };
-  state.expiredDrugs.push(rec);
-  auditLog('Expired Recorded', `${drug} — ${rec.status}`);
-  saveState(); renderExpired(); closeModal('modal-expired');
-  toast(`${drug} recorded in Expired Register`, 'warning');
-}
-
-function renderExpired() {
-  const body = document.getElementById('expired-body');
-  if (!body) return;
-  body.innerHTML = state.expiredDrugs.map((e, i) => `<tr>
-    <td>${i+1}</td><td>${e.drug}</td><td>${e.batch||'—'}</td><td>${e.expiry||'—'}</td>
-    <td>${e.qty||'—'}</td><td>${e.detected||'—'}</td><td>${e.by||'—'}</td>
-    <td>${getBadge(e.status)}</td><td>${e.remarks||'—'}</td>
-    <td><button class="btn btn-danger btn-sm" onclick="removeExpired(${i})">Remove</button></td>
-  </tr>`).join('') || '<tr><td colspan="10" style="text-align:center;color:var(--grey4);padding:20px;">No expired drugs recorded.</td></tr>';
-  const total = state.expiredDrugs.length;
-  const pending = state.expiredDrugs.filter(e=>e.status==='Pending Condemnation').length;
-  const disposed = state.expiredDrugs.filter(e=>e.status==='Disposed').length;
-  document.getElementById('exp-total').textContent = total;
-  document.getElementById('exp-pending').textContent = pending;
-  document.getElementById('exp-disposed').textContent = disposed;
-}
-
-function removeExpired(i) { state.expiredDrugs.splice(i,1); saveState(); renderExpired(); }
-
-// ═══════════════════════════════════
-// PROCUREMENT
-// ═══════════════════════════════════
-function initProcurement() {
-  document.getElementById('proc-no').value = 'PROC/' + new Date().getFullYear() + '/' + String(state.procCounter+1).padStart(4,'0');
-  document.getElementById('proc-date').value = new Date().toISOString().split('T')[0];
-}
-
-function submitProcurement() {
-  const drug = document.getElementById('proc-drug').value.trim();
-  if (!drug) { toast('Drug name required','error'); return; }
-  const proc = {
-    no: genProcNo(), drug,
-    source:document.getElementById('proc-source').value,
-    qty:document.getElementById('proc-qty').value,
-    unit:document.getElementById('proc-unit').value,
-    urgency:document.getElementById('proc-urgency').value,
-    bulk:document.getElementById('proc-bulk').value,
-    justification:document.getElementById('proc-justification').value,
-    supplier:document.getElementById('proc-supplier').value,
-    initiatedBy:document.getElementById('proc-initiated-by').value,
-    date:document.getElementById('proc-date').value,
-    status:'Pending CMAC', cmac:'', ps:''
-  };
-  state.procurements.push(proc);
-  auditLog('Procurement Req', `${proc.no}: ${drug}`);
-  saveState(); renderProcurement(); closeModal('modal-procurement');
-  toast(`Procurement request ${proc.no} submitted`, 'success');
-}
-
-function renderProcurement() {
-  const body = document.getElementById('proc-body');
-  if (!body) return;
-  body.innerHTML = state.procurements.map((p,i) => `<tr>
-    <td><strong>${p.no}</strong></td><td>${p.drug}</td><td>${p.qty} ${p.unit}</td>
-    <td>${p.source}</td><td>${getBadge(p.urgency)}</td><td>${p.initiatedBy||'AD, Stores'}</td>
-    <td><span class="badge badge-purple">CC</span></td><td>${p.date}</td>
-    <td>${p.cmac?getBadge(p.cmac):getBadge(p.status)}</td>
-    <td>${p.ps||'—'}</td>
-    <td>
-      ${p.status==='Pending CMAC'&&state.role==='cmac'?`<button class="btn btn-green btn-sm" onclick="cmacApprove(${i})">Approve</button>`:''}
-      ${p.status==='CMAC Approved'&&p.bulk.includes('Yes')&&state.role==='perm_sec'?`<button class="btn btn-navy btn-sm" onclick="psApprove(${i})">PS Approve</button>`:''}
-    </td>
-  </tr>`).join('') || '<tr><td colspan="11" style="text-align:center;color:var(--grey4);padding:20px;">No procurement requests.</td></tr>';
-}
-
-function cmacApprove(i) {
-  state.procurements[i].status='CMAC Approved'; state.procurements[i].cmac='CMAC Approved';
-  auditLog('CMAC Approved', state.procurements[i].no);
-  saveState(); renderProcurement(); toast('CMAC approval recorded','success');
-}
-function psApprove(i) {
-  state.procurements[i].status='PS Approved'; state.procurements[i].ps='PS Approved';
-  auditLog('PS Approved', state.procurements[i].no);
-  saveState(); renderProcurement(); toast('Permanent Secretary approval recorded','success');
-}
-
-// ═══════════════════════════════════
-// ALERTS
-// ═══════════════════════════════════
-function addAlert(type, msg) {
-  state.alerts.unshift({ type, msg, time: new Date().toLocaleTimeString('en-NG'), read:false });
-  if (state.alerts.length > 100) state.alerts.pop();
-  updateAlertBadge(); renderAlerts();
-}
-
-function updateAlertBadge() {
-  const unread = state.alerts.filter(a=>!a.read).length;
-  document.getElementById('alertBadge').textContent = unread;
-}
-
-function renderAlerts() {
-  const el = document.getElementById('alerts-list');
-  if (!el) return;
-  el.innerHTML = state.alerts.slice(0,30).map((a,i) => `<div class="alert-item ${a.type}" style="${a.read?'opacity:.5':''}">
-    <div class="alert-text">${a.msg}</div>
-    <span class="alert-time">${a.time}</span>
-    ${!a.read?`<button class="btn btn-secondary btn-sm" onclick="markRead(${i})">✓</button>`:''}
-  </div>`).join('') || '<p style="color:var(--grey4);padding:12px;">No alerts.</p>';
-}
-
-function markRead(i) { state.alerts[i].read=true; saveState(); updateAlertBadge(); renderAlerts(); }
-function markAllRead() { state.alerts.forEach(a=>a.read=true); saveState(); updateAlertBadge(); renderAlerts(); }
-
-// ═══════════════════════════════════
-// SETTINGS
-// ═══════════════════════════════════
-function saveSettings() {
-  state.settings.globalBuffer = parseInt(document.getElementById('global-buffer').value)||50;
-  saveState(); toast('Settings saved','success');
-}
-
-// ═══════════════════════════════════
-// AUDIT TRAIL
-// ═══════════════════════════════════
-function renderAudit() {
-  const el = document.getElementById('audit-list');
-  if (!el) return;
-  el.innerHTML = state.auditLog.slice(0,50).map(a => `<div class="audit-row"><span class="audit-time">${a.time}</span><span class="audit-user">${a.user}</span><span class="audit-action"><strong>${a.action}</strong>: ${a.detail}</span></div>`).join('') || '<p style="color:var(--grey4);padding:12px;">No audit entries.</p>';
-}
-
-function exportAudit() { toast('Audit log export initiated','info'); }
-
-// ═══════════════════════════════════
-// PRINT & EXPORT
-// ═══════════════════════════════════
-function printTable(id) {
-  const t = document.getElementById(id);
-  if (!t) return;
-  const win = window.open('','_blank');
-  win.document.write(`<html><head><title>Print</title><style>table{border-collapse:collapse;width:100%;}th,td{border:1px solid #ccc;padding:6px 10px;font-size:12px;}th{background:#f5f5f5;}</style></head><body>${t.outerHTML}</body></html>`);
-  win.document.close(); win.print();
-}
-
-function exportCSV() {
-  const rows = [['Drug Name','Source','Pack Size','Qty on Hand','Total Qty','Buffer Qty','Expiry','Status']];
-  state.drugs.forEach(d => rows.push([d.name,d.source,d.packSize,d.qtyOnHand,d.totalQty,d.bufferQty||state.settings.globalBuffer,d.expiry||'',getDrugStatus(d)]));
-  const csv = rows.map(r=>r.join(',')).join('\n');
-  const blob = new Blob([csv],{type:'text/csv'});
-  const a = document.createElement('a'); a.href=URL.createObjectURL(blob); a.download='inventory.csv'; a.click();
-}
-
-// ═══════════════════════════════════
-// INIT
-// ═══════════════════════════════════
-window.addEventListener('DOMContentLoaded', () => {
-  document.getElementById('push-date').value = new Date().toISOString().split('T')[0];
-  document.getElementById('roleSelect').value = state.role;
-  document.getElementById('roleBadgeTop').textContent = 'Role: ' + ROLES[state.role];
+const ADMIN_EMAIL='pharmsero@gmail.com';
+const ROLES={admin:'Administrator',ad_stores:'AD, Stores',hod_pharmacy:'HOD Pharmacy',dep_director:'Dep. Director of Pharmacy',director:'Director of Pharmacy',cmac:'CMAC',perm_sec:'Permanent Secretary'};
+
+let state={drugs:[],sivs:[],requisitions:[],grnList:[],expiredDrugs:[],procurements:[],alerts:[],auditLog:[],settings:{globalBuffer:50},sivCounter:0,reqCounter:0,procCounter:0,grnCounter:0,parsedGRNRows:[]};
+let currentUser=null;
+let reqUploadedDrugs=[];
+
+function loadState(){try{const s=localStorage.getItem('shmc_v3_state');if(s)Object.assign(state,JSON.parse(s));}catch(e){}}
+function saveState(){try{localStorage.setItem('shmc_v3_state',JSON.stringify(state));}catch(e){}}
+function loadUsers(){try{return JSON.parse(localStorage.getItem('shmc_v3_users')||'[]');}catch(e){return[];}}
+function saveUsers(u){try{localStorage.setItem('shmc_v3_users',JSON.stringify(u));}catch(e){}}
+function loadSession(){try{const s=localStorage.getItem('shmc_v3_session');return s?JSON.parse(s):null;}catch(e){return null;}}
+function saveSession(u){try{localStorage.setItem('shmc_v3_session',JSON.stringify(u));}catch(e){}}
+function clearSession(){try{localStorage.removeItem('shmc_v3_session');}catch(e){}}
+
+// AUTH
+function switchAuthTab(tab){
+  document.querySelectorAll('.auth-tabs button').forEach((b,i)=>b.classList.toggle('active',(tab==='login'&&i===0)||(tab==='signup'&&i===1)));
+  document.getElementById('auth-login').classList.toggle('active',tab==='login');
+  document.getElementById('auth-signup').classList.toggle('active',tab==='signup');
+}
+function showMsg(id,msg,type){const el=document.getElementById(id);el.textContent=msg;el.className='auth-msg '+type;el.style.display='block';}
+
+function doSignup(){
+  const name=document.getElementById('su-name').value.trim();
+  const email=document.getElementById('su-email').value.trim().toLowerCase();
+  const phone=document.getElementById('su-phone').value.trim();
+  const role=document.getElementById('su-role').value;
+  const pass=document.getElementById('su-pass').value;
+  const confirm=document.getElementById('su-confirm').value;
+  if(!name||!email||!role||!pass){showMsg('signup-msg','All fields are required.','error');return;}
+  if(pass.length<6){showMsg('signup-msg','Password must be at least 6 characters.','error');return;}
+  if(pass!==confirm){showMsg('signup-msg','Passwords do not match.','error');return;}
+  const users=loadUsers();
+  if(users.find(u=>u.email===email)){showMsg('signup-msg','An account with this email already exists.','error');return;}
+  const isAdmin=email===ADMIN_EMAIL;
+  users.push({name,email,phone,role:isAdmin?'admin':role,pass,status:isAdmin?'approved':'pending',registered:new Date().toLocaleString('en-NG')});
+  saveUsers(users);
+  if(isAdmin){showMsg('signup-msg','Admin account created! You may now sign in.','success');}
+  else{showMsg('signup-msg','Sign-up submitted! Awaiting administrator approval.','success');}
+  setTimeout(()=>switchAuthTab('login'),2200);
+}
+
+function doLogin(){
+  const email=document.getElementById('login-email').value.trim().toLowerCase();
+  const pass=document.getElementById('login-pass').value;
+  if(!email||!pass){showMsg('login-msg','Enter your email and password.','error');return;}
+  const users=loadUsers();
+  const user=users.find(u=>u.email===email&&u.pass===pass);
+  if(!user){showMsg('login-msg','Incorrect email or password.','error');return;}
+  if(user.status==='pending'){showMsg('login-msg','Your account is awaiting administrator approval.','warning');return;}
+  if(user.status==='rejected'){showMsg('login-msg','Your account access has been declined.','error');return;}
+  currentUser=user; saveSession(user); enterApp();
+}
+
+function doLogout(){
+  currentUser=null; clearSession();
+  document.getElementById('app-screen').classList.remove('show');
+  document.getElementById('pending-screen').classList.remove('show');
+  document.getElementById('auth-screen').classList.remove('hidden');
+  document.getElementById('login-msg').style.display='none';
+}
+
+function enterApp(){
+  document.getElementById('auth-screen').classList.add('hidden');
+  document.getElementById('pending-screen').classList.remove('show');
+  document.getElementById('app-screen').classList.add('show');
+  document.getElementById('sb-name').textContent=currentUser.name;
+  document.getElementById('sb-role').textContent=ROLES[currentUser.role]||currentUser.role;
+  document.getElementById('roleBadgeTop').textContent='Role: '+(ROLES[currentUser.role]||currentUser.role);
+  document.getElementById('nav-admin').style.display=currentUser.role==='admin'?'flex':'none';
+  loadState(); updateHODControls(); renderAll(); renderGRNList(); renderPushTodaySIVs(); updatePushSIVNo();
+  auditLog('Login','User signed in: '+(ROLES[currentUser.role]||currentUser.role));
+  const dateEl=document.getElementById('push-date'); if(dateEl)dateEl.value=new Date().toISOString().split('T')[0];
+  const grnDateEl=document.getElementById('grn-date'); if(grnDateEl)grnDateEl.value=new Date().toISOString().split('T')[0];
   addPushDrug();
-  // Init alerts for any auto-detected expired drugs
-  state.drugs.forEach(d => {
-    if (getDrugStatus(d) === 'Expired') addAlert('amber', `${d.name} has EXPIRED — review required`);
-    else if (getDrugStatus(d) === 'Critical/Zero') addAlert('red', `${d.name} is critically low/zero`);
-  });
-  updateHODControls();
-  switchRole(state.role);
-  renderAll();
-  renderGRNList();
-  renderPushTodaySIVs();
-});
+}
 
-// Drag & Drop for upload zones
-document.querySelectorAll('.upload-zone').forEach(zone => {
-  zone.addEventListener('dragover', e => { e.preventDefault(); zone.classList.add('drag-over'); });
-  zone.addEventListener('dragleave', () => zone.classList.remove('drag-over'));
-  zone.addEventListener('drop', e => {
-    e.preventDefault(); zone.classList.remove('drag-over');
-    const file = e.dataTransfer.files[0];
-    if (!file) return;
-    // Find associated input
-    const nextInput = zone.nextElementSibling;
-    if (nextInput && nextInput.type === 'file') {
-      const dt = new DataTransfer(); dt.items.add(file); nextInput.files = dt.files;
-      nextInput.dispatchEvent(new Event('change'));
+// ROLE HELPERS
+function isHOD(){return currentUser&&currentUser.role==='hod_pharmacy';}
+function isAdmin(){return currentUser&&currentUser.role==='admin';}
+function isAD(){return currentUser&&currentUser.role==='ad_stores';}
+function canReview(){return currentUser&&(isAD()||isAdmin());}
+
+function updateHODControls(){
+  const locked=document.getElementById('push-hod-locked');
+  const actions=document.getElementById('push-hod-actions');
+  const blocked=document.getElementById('push-blocked-notice');
+  if(isHOD()){locked.style.display='none';actions.style.display='block';blocked.style.display='none';}
+  else{locked.style.display='flex';actions.style.display='none';blocked.style.display='flex';}
+  const pendingHOD=state.requisitions.filter(r=>r.status==='Pending HOD Approval').length;
+  const bar=document.getElementById('hod-notif-bar');
+  if(isHOD()&&pendingHOD>0){bar.classList.add('show');document.getElementById('hod-pending-count').textContent=pendingHOD;}
+  else{bar.classList.remove('show');}
+}
+
+// NAV
+function showSection(id){
+  document.querySelectorAll('.section').forEach(s=>s.classList.remove('active'));
+  document.querySelectorAll('#sidebar nav a').forEach(a=>a.classList.remove('active'));
+  const sec=document.getElementById('sec-'+id);
+  if(sec)sec.classList.add('active');
+  document.querySelectorAll('#sidebar nav a').forEach(a=>{if(a.getAttribute('onclick')&&a.getAttribute('onclick').includes("'"+id+"'"))a.classList.add('active');});
+  if(id==='admin')renderAdminPanel();
+  renderAll();
+}
+function filterDept(btn){document.querySelectorAll('.dept-btns button').forEach(b=>b.classList.remove('active'));btn.classList.add('active');}
+
+// CLOCK
+function updateClock(){const el=document.getElementById('clock');if(el)el.textContent=new Date().toLocaleTimeString('en-NG',{hour12:false});}
+setInterval(updateClock,1000);updateClock();
+
+// MODAL
+function openModal(id){if(id==='modal-new-req')initNewReq();if(id==='modal-procurement')initProcurement();document.getElementById(id).classList.remove('hidden');}
+function closeModal(id){document.getElementById(id).classList.add('hidden');}
+document.addEventListener('click',e=>{if(e.target.classList.contains('modal-overlay'))e.target.classList.add('hidden');});
+
+// TOAST
+function toast(msg,type='info'){
+  const t=document.getElementById('toast-container');
+  const el=document.createElement('div');el.className='toast '+type;
+  const icons={success:'✅',error:'❌',info:'ℹ️',warning:'⚠️',hod:'🔐'};
+  el.innerHTML='<span>'+(icons[type]||'ℹ️')+'</span><span>'+msg+'</span>';
+  t.appendChild(el);setTimeout(()=>el.remove(),4500);
+}
+
+// AUDIT
+function auditLog(action,detail){
+  const user=currentUser?currentUser.name+' ('+ROLES[currentUser.role]+')':'System';
+  state.auditLog.unshift({time:new Date().toLocaleString('en-NG'),user,action,detail});
+  if(state.auditLog.length>200)state.auditLog.pop();
+  renderAudit();
+}
+
+// ADMIN
+function renderAdminPanel(){
+  if(!isAdmin()){toast('Admin access only','error');return;}
+  const filter=document.getElementById('admin-filter')?.value||'';
+  const users=loadUsers();
+  const filtered=users.filter(u=>!filter||u.status===filter);
+  const body=document.getElementById('admin-body');if(!body)return;
+  body.innerHTML=filtered.length?filtered.map(u=>{
+    const ri=users.indexOf(u);
+    const rc=u.status==='pending'?'user-row-pending':u.status==='approved'?'user-row-approved':'user-row-rejected';
+    let ac='';
+    if(u.status==='pending')ac=`<button class="btn btn-green btn-sm" onclick="approveUser(${ri})">✅ Approve</button> <button class="btn btn-danger btn-sm" onclick="rejectUser(${ri})">❌ Reject</button>`;
+    else if(u.status==='approved')ac=`<button class="btn btn-danger btn-sm" onclick="revokeUser(${ri})">Revoke</button>`;
+    else ac=`<button class="btn btn-amber btn-sm" onclick="approveUser(${ri})">Re-Approve</button>`;
+    return `<tr class="${rc}"><td>${u.name}</td><td>${u.email}</td><td>${u.phone||'—'}</td><td>${ROLES[u.role]||u.role}</td><td>${getBadge(u.status==='pending'?'Pending':u.status==='approved'?'Approved':'Rejected')}</td><td>${u.registered}</td><td style="white-space:nowrap;">${ac}</td></tr>`;
+  }).join(''):'<tr><td colspan="7" style="text-align:center;color:var(--grey4);padding:20px;">No users found.</td></tr>';
+}
+function approveUser(i){const u=loadUsers();u[i].status='approved';saveUsers(u);auditLog('User Approved',u[i].email+' ('+ROLES[u[i].role]+')');renderAdminPanel();toast(u[i].name+' approved','success');}
+function rejectUser(i){const u=loadUsers();u[i].status='rejected';saveUsers(u);auditLog('User Rejected',u[i].email);renderAdminPanel();toast(u[i].name+' rejected','warning');}
+function revokeUser(i){const u=loadUsers();u[i].status='rejected';saveUsers(u);auditLog('User Revoked',u[i].email);renderAdminPanel();toast(u[i].name+' access revoked','warning');}
+
+// STATUS HELPERS
+function getDrugStatus(d){
+  const today=new Date();today.setHours(0,0,0,0);
+  const exp=d.expiry?new Date(d.expiry):null;
+  if(exp&&exp<today)return'Expired';
+  const buf=d.bufferQty||state.settings.globalBuffer;
+  if(d.totalQty===0)return'Critical/Zero';
+  if(d.totalQty<=buf)return'At Buffer';
+  return'In Stock';
+}
+function getRowClass(s){return{'Expired':'row-purple','Critical/Zero':'row-red','At Buffer':'row-amber','In Stock':'row-green'}[s]||'';}
+function getBadge(s){
+  const m={'Expired':'badge-purple','Critical/Zero':'badge-red','At Buffer':'badge-amber','In Stock':'badge-green',
+    'Pending Review':'badge-amber','Pending HOD Approval':'badge-purple','HOD Approved':'badge-green','HOD Rejected':'badge-red',
+    'Issued':'badge-blue','Acknowledged':'badge-grey','Routine':'badge-grey','Urgent':'badge-amber','Emergency':'badge-red',
+    'Pending':'badge-amber','Approved':'badge-green','Rejected':'badge-red',
+    'Pending Condemnation':'badge-amber','Condemned':'badge-red','Disposed':'badge-grey','Pending CMAC':'badge-amber','CMAC Approved':'badge-green'};
+  return`<span class="badge ${m[s]||'badge-grey'}">${s}</span>`;
+}
+
+// IDs
+function genSIV(){const n=new Date();state.sivCounter++;return`SIV/Drugs/${n.getFullYear()}/${String(n.getMonth()+1).padStart(2,'0')}/${String(n.getDate()).padStart(2,'0')}/${String(state.sivCounter).padStart(3,'0')}`;}
+function genReqNo(){return`REQ/${new Date().getFullYear()}/${String(++state.reqCounter).padStart(4,'0')}`;}
+function genProcNo(){return`PROC/${new Date().getFullYear()}/${String(++state.procCounter).padStart(4,'0')}`;}
+function genGRN(){return`GRN/${new Date().getFullYear()}/${String(++state.grnCounter).padStart(4,'0')}`;}
+
+// RENDER ALL
+function renderAll(){renderDashboard();renderInventory();renderRequisitions();renderSIV();renderExpired();renderProcurement();renderAudit();renderAlerts();updateAlertBadge();updateHODControls();updatePushSIVNo();renderPushTodaySIVs();renderGRNList();}
+
+// DASHBOARD
+function renderDashboard(){
+  if(currentUser)document.getElementById('dash-greeting').textContent='Welcome, '+currentUser.name+' · '+(ROLES[currentUser.role]||currentUser.role);
+  const ss=state.drugs.map(d=>getDrugStatus(d));
+  document.getElementById('d-total').textContent=state.drugs.length;
+  document.getElementById('d-critical').textContent=ss.filter(s=>s==='Critical/Zero').length;
+  document.getElementById('d-buffer').textContent=ss.filter(s=>s==='At Buffer').length;
+  document.getElementById('d-expired').textContent=ss.filter(s=>s==='Expired').length;
+  const ph=state.requisitions.filter(r=>r.status==='Pending HOD Approval').length;
+  document.getElementById('d-pending').textContent=ph;
+  const cEl=document.getElementById('dash-critical');
+  const cd=state.drugs.filter(d=>getDrugStatus(d)==='Critical/Zero').slice(0,5);
+  cEl.innerHTML=cd.length?cd.map(d=>`<div class="alert-item red"><div class="alt"><strong>${d.name}</strong> — ${d.totalQty} units</div></div>`).join(''):'<p style="color:var(--grey4);font-size:12px;">No critical drugs 🎉</p>';
+  const pEl=document.getElementById('dash-pending-reqs');
+  const pr=state.requisitions.filter(r=>r.status==='Pending HOD Approval').slice(0,5);
+  pEl.innerHTML=pr.length?pr.map(r=>`<div class="alert-item amber" style="cursor:pointer" onclick="showSection('pull')"><div class="alt"><strong>${r.no}</strong> — ${r.dept} ${getBadge(r.status)}</div></div>`).join(''):'<p style="color:var(--grey4);font-size:12px;">No pending HOD approvals.</p>';
+  const rEl=document.getElementById('dash-recent');
+  rEl.innerHTML=state.auditLog.slice(0,8).map(a=>`<div class="audit-row"><span class="atm">${a.time}</span><span class="aus">${a.user}</span><span class="aac">${a.action}: ${a.detail}</span></div>`).join('')||'<p style="color:var(--grey4);font-size:12px;">No activity yet.</p>';
+}
+
+// INVENTORY
+function renderInventory(){
+  const fS=document.getElementById('inv-filter-status')?.value||'';
+  const fSrc=document.getElementById('inv-filter-source')?.value||'';
+  const srch=(document.getElementById('inv-search')?.value||'').toLowerCase();
+  const body=document.getElementById('inv-body');if(!body)return;
+  const fl=state.drugs.filter(d=>{const s=getDrugStatus(d);return(!fS||s===fS)&&(!fSrc||d.source===fSrc)&&(!srch||d.name.toLowerCase().includes(srch));});
+  body.innerHTML=fl.length?fl.map(d=>`<tr class="${getRowClass(getDrugStatus(d))}"><td><strong>${d.name}</strong></td><td>${d.source}</td><td>${d.packSize}</td><td>${d.qtyOnHand}</td><td>${d.totalQty}</td><td>${d.bufferQty||state.settings.globalBuffer}</td><td>${d.expiry||'—'}</td><td>${getBadge(getDrugStatus(d))}</td><td><button class="btn btn-danger btn-sm" onclick="removeDrug(${state.drugs.indexOf(d)})">Remove</button></td></tr>`).join(''):'<tr><td colspan="9" style="text-align:center;color:var(--grey4);padding:20px;">No drugs found.</td></tr>';
+}
+function addDrug(){
+  const name=document.getElementById('ad-name').value.trim();if(!name){toast('Drug name required','error');return;}
+  const ps=parseInt(document.getElementById('ad-packsize').value)||1;const qty=parseInt(document.getElementById('ad-qty').value)||0;
+  state.drugs.push({name,source:document.getElementById('ad-source').value,packSize:ps,qtyOnHand:qty,totalQty:qty*ps,bufferQty:parseInt(document.getElementById('ad-buffer').value)||0,expiry:document.getElementById('ad-expiry').value,batch:document.getElementById('ad-batch').value});
+  saveState();auditLog('Add Drug',name);renderAll();closeModal('modal-add-drug');toast(name+' added','success');
+  document.getElementById('ad-name').value='';document.getElementById('ad-qty').value='';
+}
+function removeDrug(i){if(!confirm('Remove this drug?'))return;auditLog('Remove Drug',state.drugs[i].name);state.drugs.splice(i,1);saveState();renderAll();}
+function calcAddDrugTotal(){const ps=parseInt(document.getElementById('ad-packsize').value)||1;document.getElementById('ad-total').value=(parseInt(document.getElementById('ad-qty').value)||0)*ps;}
+
+// DEDUCT INVENTORY (immediate on HOD approval)
+function deductInventory(drugs){
+  drugs.forEach(d=>{
+    const drug=state.drugs.find(x=>x.name.toLowerCase()===d.name.toLowerCase());
+    if(drug){
+      const units=parseInt(d.totalUnits||0)||((parseInt(d.qty||d.qtyPacks||0))*(parseInt(d.packSize||d.pack||1)||1));
+      drug.totalQty=Math.max(0,drug.totalQty-units);drug.qtyOnHand=Math.ceil(drug.totalQty/(drug.packSize||1));
+      if(getDrugStatus(drug)==='Critical/Zero')addAlert('red',drug.name+' is now at ZERO stock after issuance');
+      else if(getDrugStatus(drug)==='At Buffer')addAlert('amber',drug.name+' is now at buffer level after issuance');
     }
+  });
+}
+
+// PUSH
+let pushDrugRows=[];
+function updatePushSIVNo(){const n=new Date();const nx=state.sivCounter+1;const el=document.getElementById('push-siv-no');if(el)el.textContent=`SIV/Drugs/${n.getFullYear()}/${String(n.getMonth()+1).padStart(2,'0')}/${String(n.getDate()).padStart(2,'0')}/${String(nx).padStart(3,'0')}`;}
+function addPushDrug(name='',packSize='',qty=''){
+  const id=Date.now()+Math.random();pushDrugRows.push(id);
+  const body=document.getElementById('push-drug-body');
+  const tr=document.createElement('tr');tr.id='push-row-'+id;
+  tr.innerHTML=`<td><input type="text" placeholder="Drug name" value="${name}"/></td><td><select onchange="updPushTot(this)"><option>1</option><option>5</option><option>10</option><option>12</option><option>14</option><option>20</option><option>24</option><option>28</option><option>30</option><option>50</option><option>60</option><option>100</option></select></td><td><input type="number" min="1" value="${qty||1}" oninput="updPushTot(this)"/></td><td><input type="text" readonly style="background:var(--grey1)"/></td><td><select><option>Packs</option><option>Vials</option><option>Bottles</option><option>Sachets</option></select></td><td><button class="btn btn-danger btn-sm" onclick="remPushRow('${id}')">✕</button></td>`;
+  if(packSize){const s=tr.querySelector('select');if(s)s.value=packSize;}
+  body.appendChild(tr);
+  if(qty&&packSize)updPushTot(tr.querySelector('input[type=number]'));
+}
+function updPushTot(el){const r=el.closest('tr');const ps=parseInt(r.querySelectorAll('select')[0].value)||1;const q=parseInt(r.querySelectorAll('input[type=number]')[0].value)||0;r.querySelectorAll('input')[2].value=ps*q;}
+function remPushRow(id){document.getElementById('push-row-'+id)?.remove();pushDrugRows=pushDrugRows.filter(r=>r!=id);}
+function resetPushForm(){['push-dept','push-issued-by','push-received-by','push-remarks'].forEach(id=>{const el=document.getElementById(id);if(el)el.value='';});const hc=document.getElementById('push-hod-comment');if(hc)hc.value='';document.getElementById('push-drug-body').innerHTML='';pushDrugRows=[];addPushDrug();updatePushSIVNo();}
+function collectPushDrugs(){return Array.from(document.querySelectorAll('#push-drug-body tr')).map(r=>{const inputs=r.querySelectorAll('input');const selects=r.querySelectorAll('select');return{name:inputs[0].value,packSize:selects[0].value,qtyPacks:inputs[1].value,totalUnits:inputs[2].value,unit:selects[1].value};}).filter(d=>d.name.trim());}
+function savePushDraft(){
+  const dept=document.getElementById('push-dept').value;if(!dept){toast('Select a destination department','error');return;}
+  const drugs=collectPushDrugs();if(!drugs.length){toast('Add at least one drug','error');return;}
+  const req={no:genReqNo(),dept,flow:'push',drugs,source:document.getElementById('push-source').value,date:document.getElementById('push-date').value||new Date().toISOString().split('T')[0],issuedBy:currentUser?currentUser.name:'',receivedBy:document.getElementById('push-received-by').value,remarks:document.getElementById('push-remarks').value,status:'Pending HOD Approval',urgency:'Routine',siv:null,hodComment:''};
+  state.requisitions.push(req);
+  addAlert('amber','Push issuance to '+dept+' requires HOD Pharmacy approval — '+req.no);
+  auditLog('Push Draft Saved',req.no+' to '+dept);saveState();renderAll();
+  toast(req.no+' saved & forwarded to HOD Pharmacy for approval','info');
+}
+function hodApprovePush(){
+  if(!isHOD()){toast('Only HOD Pharmacy can approve','error');return;}
+  const dept=document.getElementById('push-dept').value;if(!dept){toast('Select destination department','error');return;}
+  const drugs=collectPushDrugs();if(!drugs.length){toast('Add at least one drug','error');return;}
+  const comment=document.getElementById('push-hod-comment').value;
+  const sivNo=genSIV();
+  state.sivs.push({no:sivNo,dept,drugs,source:document.getElementById('push-source').value,issuedBy:document.getElementById('push-issued-by').value||'AD, Stores',approvedBy:currentUser.name+' (HOD Pharmacy)',hodComment:comment,date:document.getElementById('push-date').value||new Date().toISOString().split('T')[0],flow:'Push',remarks:document.getElementById('push-remarks').value});
+  deductInventory(drugs);
+  addAlert('green','SIV '+sivNo+' issued to '+dept+' — approved by HOD · Inventory deducted');
+  auditLog('HOD Approved Push',sivNo+' → '+dept+(comment?' | '+comment:''));
+  saveState();renderAll();toast('✅ SIV '+sivNo+' posted — inventory deducted immediately','success');resetPushForm();
+}
+function hodRejectPush(){
+  if(!isHOD()){toast('Only HOD Pharmacy can reject','error');return;}
+  const dept=document.getElementById('push-dept').value||'Unknown';const comment=document.getElementById('push-hod-comment').value;
+  addAlert('amber','Push issuance to '+dept+' rejected by HOD Pharmacy');
+  auditLog('HOD Rejected Push','To '+dept+(comment?' | '+comment:''));saveState();renderAll();toast('Issuance rejected','warning');
+}
+function renderPushTodaySIVs(){
+  const today=new Date().toISOString().split('T')[0];const el=document.getElementById('push-today-sivs');if(!el)return;
+  const ts=state.sivs.filter(s=>s.date===today&&s.flow==='Push');
+  el.innerHTML=ts.length?ts.map(s=>`<div class="alert-item green"><div class="alt"><strong>${s.no}</strong> → ${s.dept} | ${s.drugs.map(d=>d.name).join(', ')} | Approved: ${s.approvedBy}</div><span class="badge badge-green">Posted</span></div>`).join(''):'<p style="color:var(--grey4);font-size:12px;">None posted today.</p>';
+}
+function handlePushUpload(input){
+  const file=input.files[0];if(!file)return;
+  const res=document.getElementById('push-upload-result');res.innerHTML='<span style="color:var(--teal);">⏳ Parsing…</span>';
+  parseReqFile(file,rows=>{
+    if(!rows.length){res.innerHTML='<span style="color:var(--red);">No drug rows found.</span>';return;}
+    document.getElementById('push-drug-body').innerHTML='';pushDrugRows=[];
+    rows.forEach(r=>addPushDrug(r.name,r.packSize||'',r.qty||''));
+    res.innerHTML='<span style="color:var(--green);">✅ '+rows.length+' drug(s) pre-filled.</span>';
+    toast(rows.length+' drugs pre-filled in Push form','success');
+  });
+}
+
+// PULL
+let reqDrugRows2=[];
+function initNewReq(){
+  document.getElementById('req-no').value='REQ/'+new Date().getFullYear()+'/'+String(state.reqCounter+1).padStart(4,'0');
+  document.getElementById('req-date').value=new Date().toISOString().split('T')[0];
+  document.getElementById('req-drug-body').innerHTML='';reqDrugRows2=[];reqUploadedDrugs=[];
+  document.getElementById('req-upload-result').innerHTML='';document.getElementById('req-upload-preview').style.display='none';
+  addReqDrug();switchReqMode('table',document.querySelector('#modal-new-req .em-tabs button'));
+}
+function switchReqMode(mode,btn){
+  document.querySelectorAll('#modal-new-req .em-tabs button').forEach(b=>b.classList.remove('active'));if(btn)btn.classList.add('active');
+  document.getElementById('req-mode-table').classList.toggle('active',mode==='table');
+  document.getElementById('req-mode-upload').classList.toggle('active',mode==='upload');
+}
+function addReqDrug(name='',qty='',unit='',just=''){
+  const id=Date.now()+Math.random();reqDrugRows2.push(id);
+  const body=document.getElementById('req-drug-body');const tr=document.createElement('tr');tr.id='req-row-'+id;
+  tr.innerHTML=`<td><input type="text" placeholder="Drug name" value="${name}"/></td><td><input type="number" min="1" value="${qty||1}"/></td><td><select><option>Packs</option><option>Vials</option><option>Bottles</option><option>Sachets</option><option>Bags</option><option>Ampoules</option></select></td><td><input type="text" placeholder="Justification" value="${just}"/></td><td><button class="btn btn-danger btn-sm" onclick="remReqRow('${id}')">✕</button></td>`;
+  if(unit){const opts=['Packs','Vials','Bottles','Sachets','Bags','Ampoules'];const s=tr.querySelector('select');opts.forEach((o,i)=>{if(o.toLowerCase()===unit.toLowerCase())s.selectedIndex=i;});}
+  body.appendChild(tr);
+}
+function remReqRow(id){document.getElementById('req-row-'+id)?.remove();reqDrugRows2=reqDrugRows2.filter(r=>r!=id);}
+function handleReqFileUpload(input){
+  const file=input.files[0];if(!file)return;
+  const res=document.getElementById('req-upload-result');res.innerHTML='<span style="color:var(--teal);">⏳ Parsing…</span>';
+  parseReqFile(file,rows=>{
+    if(!rows.length){res.innerHTML='<span style="color:var(--red);">No rows found. Check columns: Drug Name | Quantity | Unit | Justification</span>';return;}
+    reqUploadedDrugs=rows;
+    res.innerHTML='<span style="color:var(--green);">✅ '+rows.length+' row(s) parsed.</span>';
+    document.getElementById('req-upload-preview-body').innerHTML=rows.map(r=>`<tr><td>${r.name}</td><td>${r.qty||1}</td><td>${r.unit||'Packs'}</td><td>${r.justification||'—'}</td></tr>`).join('');
+    document.getElementById('req-upload-preview').style.display='block';
+  });
+}
+function submitRequisition(){
+  const dept=document.getElementById('req-dept').value;if(!dept){toast('Select requesting department','error');return;}
+  const isUpload=document.getElementById('req-mode-upload').classList.contains('active');
+  let drugs=[];
+  if(isUpload){
+    if(!reqUploadedDrugs.length){toast('Upload a requisition file first','error');return;}
+    drugs=reqUploadedDrugs.map(r=>({name:r.name,qty:r.qty||1,unit:r.unit||'Packs',justification:r.justification||''}));
+  } else {
+    drugs=Array.from(document.querySelectorAll('#req-drug-body tr')).map(r=>{const ins=r.querySelectorAll('input');const sel=r.querySelector('select');return{name:ins[0].value,qty:ins[1].value,unit:sel?.value||'Packs',justification:ins[2]?.value||''};}).filter(d=>d.name.trim());
+    if(!drugs.length){toast('Add at least one drug','error');return;}
+  }
+  const req={no:genReqNo(),dept,drugs,flow:'pull',urgency:document.getElementById('req-urgency').value,requestedBy:document.getElementById('req-by').value||(currentUser?currentUser.name:''),notes:document.getElementById('req-notes').value,date:document.getElementById('req-date').value,status:'Pending Review',siv:null,hodComment:''};
+  state.requisitions.push(req);
+  addAlert('amber','New Pull requisition '+req.no+' from '+dept+' — pending AD review');
+  auditLog('Requisition Submitted',req.no+' from '+dept);saveState();renderAll();closeModal('modal-new-req');toast('Requisition '+req.no+' submitted','success');
+}
+function renderRequisitions(){
+  const fD=document.getElementById('pull-filter-dept')?.value||'';const fS=document.getElementById('pull-filter-status')?.value||'';
+  const body=document.getElementById('pull-body');if(!body)return;
+  const fl=state.requisitions.filter(r=>(!fD||r.dept===fD)&&(!fS||r.status===fS));
+  body.innerHTML=fl.length?fl.map(r=>{
+    const idx=state.requisitions.indexOf(r);const dn=r.drugs.slice(0,2).map(d=>d.name).join(', ')+(r.drugs.length>2?'…':'');
+    let ac='';
+    if(isHOD()&&r.status==='Pending HOD Approval')ac=`<button class="btn btn-hod btn-sm" onclick="openHODApproval(${idx})">🔐 Approve</button>`;
+    else if(canReview()&&r.status==='Pending Review')ac=`<button class="btn btn-amber btn-sm" onclick="adReviewReq(${idx})">Review →</button>`;
+    else ac=`<button class="btn btn-secondary btn-sm" onclick="viewReq(${idx})">View</button>`;
+    return`<tr><td><strong>${r.no}</strong></td><td>${r.dept}</td><td>${dn}</td><td>${getBadge(r.urgency)}</td><td>${r.date}</td><td>${getBadge(r.status)}</td><td>${r.siv?`<span class="badge badge-blue">${r.siv}</span>`:'—'}</td><td>${ac}</td></tr>`;
+  }).join(''):'<tr><td colspan="8" style="text-align:center;color:var(--grey4);padding:20px;">No requisitions found.</td></tr>';
+}
+function adReviewReq(idx){
+  const req=state.requisitions[idx];req.status='Pending HOD Approval';
+  addAlert('amber','Requisition '+req.no+' from '+req.dept+' forwarded to HOD Pharmacy for approval');
+  auditLog('AD Reviewed Req',req.no+' → forwarded to HOD');saveState();renderAll();toast(req.no+' forwarded to HOD Pharmacy','info');
+}
+function openHODApproval(idx){
+  if(!isHOD()){toast('Only HOD Pharmacy can approve','error');return;}
+  const req=state.requisitions[idx];
+  document.getElementById('req-detail-body').innerHTML=`<div style="margin-bottom:12px;"><strong>${req.no}</strong> · ${req.dept} · ${getBadge(req.urgency)} · ${req.date}</div><table class="dit"><thead><tr><th>Drug Name</th><th>Qty</th><th>Unit</th><th>Justification</th></tr></thead><tbody>${req.drugs.map(d=>`<tr><td>${d.name}</td><td>${d.qty}</td><td>${d.unit||'—'}</td><td>${d.justification||'—'}</td></tr>`).join('')}</tbody></table>${req.notes?`<p style="font-size:12px;margin-top:8px;color:var(--grey4);">Notes: ${req.notes}</p>`:''}<div class="hod-zone" style="margin-top:14px;"><h4>🔐 HOD Pharmacy Decision</h4><div class="form-group"><label>HOD Comments</label><textarea id="hod-comment-modal" placeholder="Comments…"></textarea></div></div><div class="warn-box" style="margin-top:8px;">⚠️ Inventory will be deducted <strong>immediately</strong> upon approval.</div>`;
+  document.getElementById('req-detail-footer').innerHTML=`<button class="btn btn-secondary" onclick="closeModal('modal-req-detail')">Close</button><button class="btn btn-danger" onclick="hodRejectReq(${idx})">❌ Reject</button><button class="btn btn-hod" onclick="hodApproveReq(${idx})">✅ Approve & Issue SIV</button>`;
+  openModal('modal-req-detail');
+}
+function hodApproveReq(idx){
+  if(!isHOD()){toast('Only HOD Pharmacy can approve','error');return;}
+  const req=state.requisitions[idx];const comment=document.getElementById('hod-comment-modal')?.value||'';
+  const sivNo=genSIV();req.status='Issued';req.siv=sivNo;req.hodComment=comment;
+  state.sivs.push({no:sivNo,dept:req.dept,drugs:req.drugs,flow:'Pull',source:'Contract',issuedBy:'AD, Stores',approvedBy:currentUser.name+' (HOD Pharmacy)',hodComment:comment,date:new Date().toISOString().split('T')[0],remarks:''});
+  const dd=req.drugs.map(d=>({name:d.name,totalUnits:(parseInt(d.qty)||0)*(parseInt(d.packSize||1)||1),qty:d.qty,packSize:d.packSize||1}));
+  deductInventory(dd);
+  addAlert('green','SIV '+sivNo+' issued — '+req.no+' approved by HOD · Inventory deducted');
+  auditLog('HOD Approved Pull',req.no+' → SIV '+sivNo+(comment?' | '+comment:''));
+  saveState();renderAll();closeModal('modal-req-detail');toast('✅ SIV '+sivNo+' issued — inventory deducted immediately','success');
+}
+function hodRejectReq(idx){
+  if(!isHOD())return;const req=state.requisitions[idx];const comment=document.getElementById('hod-comment-modal')?.value||'';
+  req.status='HOD Rejected';req.hodComment=comment;
+  addAlert('amber','Requisition '+req.no+' from '+req.dept+' rejected by HOD Pharmacy');
+  auditLog('HOD Rejected Pull',req.no+(comment?' | '+comment:''));saveState();renderAll();closeModal('modal-req-detail');toast('Requisition '+req.no+' rejected','warning');
+}
+function viewReq(idx){
+  const req=state.requisitions[idx];if(!req)return;
+  document.getElementById('req-detail-body').innerHTML=`<div style="margin-bottom:12px;"><strong>${req.no}</strong> · ${req.dept} · ${getBadge(req.urgency)} · ${req.date} · ${getBadge(req.status)}</div><table class="dit"><thead><tr><th>Drug Name</th><th>Qty</th><th>Unit</th><th>Justification</th></tr></thead><tbody>${req.drugs.map(d=>`<tr><td>${d.name}</td><td>${d.qty}</td><td>${d.unit||'—'}</td><td>${d.justification||'—'}</td></tr>`).join('')}</tbody></table>${req.siv?`<p style="margin-top:10px;font-size:12px;">SIV: <strong>${req.siv}</strong></p>`:''}${req.hodComment?`<p style="margin-top:6px;font-size:12px;color:var(--grey4);">HOD Comment: ${req.hodComment}</p>`:''}`;
+  document.getElementById('req-detail-footer').innerHTML=`<button class="btn btn-secondary" onclick="closeModal('modal-req-detail')">Close</button>`;
+  openModal('modal-req-detail');
+}
+
+// SIV
+function renderSIV(){
+  const body=document.getElementById('siv-body');if(!body)return;
+  body.innerHTML=state.sivs.length?state.sivs.map(s=>`<tr><td><strong>${s.no}</strong></td><td>${s.dept}</td><td>${s.drugs.slice(0,3).map(d=>d.name).join(', ')}</td><td>${s.drugs.reduce((a,d)=>a+(parseInt(d.totalUnits||d.qty||0)),0)}</td><td>${s.source||'—'}</td><td>${s.approvedBy||'—'}</td><td>${s.issuedBy||'—'}</td><td>${s.date}</td><td><span class="badge badge-${s.flow==='Push'?'blue':'green'}">${s.flow}</span></td></tr>`).join(''):'<tr><td colspan="9" style="text-align:center;color:var(--grey4);padding:20px;">No SIVs yet.</td></tr>';
+}
+function exportSIV(){toast('SIV export initiated','info');}
+
+// GRN MANUAL
+function calcGRNTotal(){const ps=parseInt(document.getElementById('grn-packsize').value)||1;const qty=parseInt(document.getElementById('grn-qty').value)||0;document.getElementById('grn-total').value=ps*qty;}
+function postGRN(){
+  const drug=document.getElementById('grn-drug').value.trim();if(!drug){toast('Drug name required','error');return;}
+  const ps=parseInt(document.getElementById('grn-packsize').value)||1;const qty=parseInt(document.getElementById('grn-qty').value)||0;const total=ps*qty;
+  const expiry=document.getElementById('grn-expiry').value;
+  const grn={no:document.getElementById('grn-no').value||genGRN(),drug,packSize:ps,qtyPacks:qty,totalUnits:total,source:document.getElementById('grn-source').value,supplier:document.getElementById('grn-supplier').value,batch:document.getElementById('grn-batch').value,cost:document.getElementById('grn-cost').value,mfg:document.getElementById('grn-mfg').value,expiry,location:document.getElementById('grn-location').value,remarks:document.getElementById('grn-remarks').value,date:document.getElementById('grn-date').value||new Date().toISOString().split('T')[0],receivedBy:currentUser?currentUser.name:'AD, Stores'};
+  state.grnList.unshift(grn);updateInventoryFromGRN(grn);
+  addAlert('green','GRN: '+total+' units of '+drug+' received');auditLog('GRN Posted',grn.no+': '+qty+' packs of '+drug);
+  saveState();renderAll();toast('GRN posted — '+total+' units of '+drug,'success');
+}
+function updateInventoryFromGRN(grn){
+  const ex=state.drugs.find(d=>d.name.toLowerCase()===grn.drug.toLowerCase());
+  if(ex){ex.totalQty+=grn.totalUnits;ex.qtyOnHand=Math.ceil(ex.totalQty/ex.packSize);if(grn.expiry)ex.expiry=grn.expiry;}
+  else{state.drugs.push({name:grn.drug,source:grn.source||'Regular',packSize:grn.packSize,qtyOnHand:grn.qtyPacks,totalQty:grn.totalUnits,bufferQty:0,expiry:grn.expiry||'',batch:grn.batch||''});}
+}
+function resetGRN(){['grn-no','grn-drug','grn-qty','grn-total','grn-batch','grn-cost','grn-remarks'].forEach(id=>{const el=document.getElementById(id);if(el)el.value='';});}
+function switchReceiveMode(mode,btn){document.querySelectorAll('#sec-receive .em-tabs button').forEach(b=>b.classList.remove('active'));btn.classList.add('active');document.getElementById('receive-manual').classList.toggle('active',mode==='manual');document.getElementById('receive-upload').classList.toggle('active',mode==='upload');}
+
+// GRN UPLOAD
+const GRN_COL_MAP={'drug name':'name','drug':'name','item':'name','medicine':'name','quantity':'qty','qty':'qty','packs':'qty','unit':'unit','pack size':'packSize','pack':'packSize','packsize':'packSize','batch number':'batch','batch no':'batch','batch':'batch','lot number':'batch','manufacture date':'mfg','mfg date':'mfg','manufacturing date':'mfg','expiry date':'expiry','expiry':'expiry','exp date':'expiry','unit cost':'cost','cost':'cost','price':'cost','supplier':'supplier','vendor':'supplier','source':'source','storage location':'location','location':'location','store':'location','remarks':'remarks','notes':'remarks','comment':'remarks'};
+const REQ_COL_MAP={'drug name':'name','drug':'name','item':'name','medicine':'name','name':'name','quantity':'qty','qty':'qty','amount':'qty','unit':'unit','units':'unit','justification':'justification','reason':'justification','indication':'justification','notes':'justification'};
+
+function handleGRNUpload(input){
+  const file=input.files[0];if(!file)return;
+  const res=document.getElementById('grn-upload-result');res.innerHTML='<span style="color:var(--teal);">⏳ Parsing file…</span>';
+  parseSheet(file,GRN_COL_MAP,rows=>{
+    if(!rows.length){res.innerHTML='<span style="color:var(--red);">No rows found. Ensure column names match required headings.</span>';return;}
+    state.parsedGRNRows=rows;
+    res.innerHTML='<span style="color:var(--green);">✅ '+rows.length+' row(s) parsed. Review and click Post All GRNs.</span>';
+    document.getElementById('grn-preview-head').innerHTML='<tr><th>Drug Name</th><th>Qty</th><th>Unit</th><th>Pack Size</th><th>Batch</th><th>Mfg Date</th><th>Expiry</th><th>Cost(₦)</th><th>Supplier</th><th>Source</th><th>Location</th><th>Remarks</th></tr>';
+    document.getElementById('grn-preview-body').innerHTML=rows.map(r=>`<tr><td>${r.name||'—'}</td><td>${r.qty||'—'}</td><td>${r.unit||'—'}</td><td>${r.packSize||1}</td><td>${r.batch||'—'}</td><td>${r.mfg||'—'}</td><td>${r.expiry||'—'}</td><td>${r.cost||'—'}</td><td>${r.supplier||'—'}</td><td>${r.source||'—'}</td><td>${r.location||'—'}</td><td>${r.remarks||'—'}</td></tr>`).join('');
+    document.getElementById('grn-upload-preview').style.display='block';
+  });
+}
+function postGRNUpload(){
+  if(!state.parsedGRNRows||!state.parsedGRNRows.length){toast('No parsed rows to post','error');return;}
+  const defSrc=document.getElementById('grn-upload-source').value;
+  const defSup=document.getElementById('grn-upload-supplier').value;
+  const date=document.getElementById('grn-upload-date').value||new Date().toISOString().split('T')[0];
+  let count=0;
+  state.parsedGRNRows.forEach(r=>{
+    const ps=parseInt(r.packSize)||1;const qty=parseInt(r.qty)||0;const total=ps*qty;
+    const grn={no:genGRN(),drug:r.name,packSize:ps,qtyPacks:qty,totalUnits:total,source:r.source||defSrc,supplier:r.supplier||defSup,batch:r.batch||'',cost:r.cost||'',mfg:r.mfg||'',expiry:r.expiry||'',location:r.location||'Shelf A1',remarks:r.remarks||'',date,receivedBy:currentUser?currentUser.name:'AD, Stores',unit:r.unit||'Packs'};
+    state.grnList.unshift(grn);updateInventoryFromGRN(grn);count++;
+  });
+  addAlert('green',count+' GRN(s) posted from upload — inventory updated');
+  auditLog('Batch GRN Upload',count+' drug lines received');
+  state.parsedGRNRows=[];document.getElementById('grn-upload-preview').style.display='none';
+  document.getElementById('grn-upload-result').innerHTML='<span style="color:var(--green);">✅ '+count+' GRN(s) posted — inventory updated.</span>';
+  saveState();renderAll();toast(count+' GRNs posted — inventory updated','success');
+}
+function renderGRNList(){
+  const el=document.getElementById('grn-list');if(!el)return;
+  el.innerHTML=state.grnList.slice(0,10).map(g=>`<div class="alert-item green"><div class="alt"><strong>${g.no}</strong> · ${g.drug} · ${g.totalUnits} units · ${g.date}</div><span class="badge badge-green">${g.source}</span></div>`).join('')||'<p style="color:var(--grey4);font-size:12px;">No GRNs posted yet.</p>';
+}
+
+// SHEET PARSER (generic, takes a col map)
+function parseSheet(file,colMap,callback){
+  const nm=file.name.toLowerCase();
+  if(nm.endsWith('.docx')){
+    const reader=new FileReader();
+    reader.onload=e=>{
+      try{
+        const text=new TextDecoder().decode(new Uint8Array(e.target.result));
+        const tokens=[...text.matchAll(/<w:t[^>]*>([^<]+)<\/w:t>/g)].map(m=>m[1].trim()).filter(Boolean);
+        const hi=tokens.findIndex(t=>/(drug|quantity|qty|batch|expiry|unit)/i.test(t));
+        if(hi===-1){callback([]);return;}
+        const headers=[];let i=hi;
+        while(i<tokens.length&&isNaN(tokens[i])&&tokens[i].length<40){headers.push(tokens[i].toLowerCase().trim());i++;}
+        const cm=headers.map(h=>colMap[h]||null);
+        const rows=[];
+        while(i<tokens.length){const row={};cm.forEach((f,j)=>{if(f&&tokens[i+j]!==undefined)row[f]=tokens[i+j];});if(row.name&&row.name.trim())rows.push(row);i+=cm.length;}
+        callback(rows);
+      }catch(e){callback([]);}
+    };reader.readAsArrayBuffer(file);
+  } else {
+    const reader=new FileReader();
+    reader.onload=e=>{
+      try{
+        const wb=XLSX.read(new Uint8Array(e.target.result),{type:'array'});
+        const ws=wb.Sheets[wb.SheetNames[0]];
+        const data=XLSX.utils.sheet_to_json(ws,{header:1,defval:''});
+        let hri=0;
+        for(let r=0;r<Math.min(5,data.length);r++){if(data[r].some(c=>/(drug|quantity|qty|batch|expiry|unit)/i.test(String(c)))){hri=r;break;}}
+        const headers=data[hri].map(c=>String(c).toLowerCase().trim());
+        const cm=headers.map(h=>colMap[h]||null);
+        const rows=[];
+        for(let r=hri+1;r<data.length;r++){const row={};cm.forEach((f,j)=>{if(f&&data[r][j]!==undefined&&data[r][j]!=='')row[f]=String(data[r][j]).trim();});if(row.name&&row.name.trim())rows.push(row);}
+        callback(rows);
+      }catch(e){callback([]);}
+    };reader.readAsArrayBuffer(file);
+  }
+}
+function parseReqFile(file,callback){parseSheet(file,REQ_COL_MAP,callback);}
+
+// EXPIRED
+function recordExpired(){
+  const drug=document.getElementById('exp-drug').value.trim();if(!drug){toast('Drug name required','error');return;}
+  state.expiredDrugs.push({drug,batch:document.getElementById('exp-batch').value,expiry:document.getElementById('exp-expiry').value,qty:document.getElementById('exp-qty').value,detected:document.getElementById('exp-detected').value,by:document.getElementById('exp-by').value||(currentUser?currentUser.name:''),status:document.getElementById('exp-status').value,remarks:document.getElementById('exp-remarks').value});
+  auditLog('Expired Recorded',drug);saveState();renderExpired();closeModal('modal-expired');toast(drug+' recorded in Expired Register','warning');
+}
+function renderExpired(){
+  const body=document.getElementById('expired-body');if(!body)return;
+  body.innerHTML=state.expiredDrugs.map((e,i)=>`<tr><td>${i+1}</td><td>${e.drug}</td><td>${e.batch||'—'}</td><td>${e.expiry||'—'}</td><td>${e.qty||'—'}</td><td>${e.detected||'—'}</td><td>${e.by||'—'}</td><td>${getBadge(e.status)}</td><td>${e.remarks||'—'}</td><td><button class="btn btn-danger btn-sm" onclick="removeExpired(${i})">Remove</button></td></tr>`).join('')||'<tr><td colspan="10" style="text-align:center;color:var(--grey4);padding:20px;">No expired drugs recorded.</td></tr>';
+  document.getElementById('exp-total').textContent=state.expiredDrugs.length;
+  document.getElementById('exp-pending').textContent=state.expiredDrugs.filter(e=>e.status==='Pending Condemnation').length;
+  document.getElementById('exp-disposed').textContent=state.expiredDrugs.filter(e=>e.status==='Disposed').length;
+}
+function removeExpired(i){state.expiredDrugs.splice(i,1);saveState();renderExpired();}
+
+// PROCUREMENT
+function initProcurement(){document.getElementById('proc-no').value='PROC/'+new Date().getFullYear()+'/'+String(state.procCounter+1).padStart(4,'0');document.getElementById('proc-date').value=new Date().toISOString().split('T')[0];if(currentUser)document.getElementById('proc-initiated-by').value=currentUser.name;}
+function submitProcurement(){
+  const drug=document.getElementById('proc-drug').value.trim();if(!drug){toast('Drug name required','error');return;}
+  state.procurements.push({no:genProcNo(),drug,source:document.getElementById('proc-source').value,qty:document.getElementById('proc-qty').value,unit:document.getElementById('proc-unit').value,urgency:document.getElementById('proc-urgency').value,bulk:document.getElementById('proc-bulk').value,justification:document.getElementById('proc-justification').value,supplier:document.getElementById('proc-supplier').value,initiatedBy:document.getElementById('proc-initiated-by').value,date:document.getElementById('proc-date').value,status:'Pending CMAC',cmac:'',ps:''});
+  auditLog('Procurement Req',drug);saveState();renderProcurement();closeModal('modal-procurement');toast('Procurement request submitted','success');
+}
+function renderProcurement(){
+  const body=document.getElementById('proc-body');if(!body)return;
+  body.innerHTML=state.procurements.map((p,i)=>`<tr><td><strong>${p.no}</strong></td><td>${p.drug}</td><td>${p.qty} ${p.unit}</td><td>${p.source}</td><td>${getBadge(p.urgency)}</td><td>${p.initiatedBy||'—'}</td><td>${p.date}</td><td>${getBadge(p.cmac||p.status)}</td><td>${p.status==='Pending CMAC'&&currentUser?.role==='cmac'?`<button class="btn btn-green btn-sm" onclick="cmacApprove(${i})">Approve</button>`:''}</td></tr>`).join('')||'<tr><td colspan="9" style="text-align:center;color:var(--grey4);padding:20px;">No procurement requests.</td></tr>';
+}
+function cmacApprove(i){state.procurements[i].status='CMAC Approved';state.procurements[i].cmac='CMAC Approved';auditLog('CMAC Approved',state.procurements[i].no);saveState();renderProcurement();toast('CMAC approval recorded','success');}
+
+// ALERTS
+function addAlert(type,msg){state.alerts.unshift({type,msg,time:new Date().toLocaleTimeString('en-NG'),read:false});if(state.alerts.length>100)state.alerts.pop();updateAlertBadge();renderAlerts();}
+function updateAlertBadge(){const el=document.getElementById('alertBadge');if(el)el.textContent=state.alerts.filter(a=>!a.read).length;}
+function renderAlerts(){const el=document.getElementById('alerts-list');if(!el)return;el.innerHTML=state.alerts.slice(0,30).map((a,i)=>`<div class="alert-item ${a.type}" style="${a.read?'opacity:.5':''}"><div class="alt">${a.msg}</div><span class="atm">${a.time}</span>${!a.read?`<button class="btn btn-secondary btn-sm" onclick="markRead(${i})">✓</button>`:''}</div>`).join('')||'<p style="color:var(--grey4);padding:12px;">No alerts.</p>';}
+function markRead(i){state.alerts[i].read=true;saveState();updateAlertBadge();renderAlerts();}
+function markAllRead(){state.alerts.forEach(a=>a.read=true);saveState();updateAlertBadge();renderAlerts();}
+
+// AUDIT
+function renderAudit(){const el=document.getElementById('audit-list');if(!el)return;el.innerHTML=state.auditLog.slice(0,50).map(a=>`<div class="audit-row"><span class="atm">${a.time}</span><span class="aus">${a.user}</span><span class="aac"><strong>${a.action}</strong>: ${a.detail}</span></div>`).join('')||'<p style="color:var(--grey4);padding:12px;">No audit entries.</p>';}
+function exportAudit(){toast('Audit log export initiated','info');}
+
+// PRINT/CSV
+function printTable(id){const t=document.getElementById(id);if(!t)return;const w=window.open('','_blank');w.document.write('<html><head><title>Print</title><style>table{border-collapse:collapse;width:100%;}th,td{border:1px solid #ccc;padding:6px 10px;font-size:12px;}th{background:#f5f5f5;}</style></head><body>'+t.outerHTML+'</body></html>');w.document.close();w.print();}
+function exportCSV(){const rows=[['Drug Name','Source','Pack Size','Qty on Hand','Total Units','Buffer Qty','Expiry','Status']];state.drugs.forEach(d=>rows.push([d.name,d.source,d.packSize,d.qtyOnHand,d.totalQty,d.bufferQty||state.settings.globalBuffer,d.expiry||'',getDrugStatus(d)]));const csv=rows.map(r=>r.join(',')).join('\n');const blob=new Blob([csv],{type:'text/csv'});const a=document.createElement('a');a.href=URL.createObjectURL(blob);a.download='inventory.csv';a.click();}
+
+// INIT
+window.addEventListener('DOMContentLoaded',()=>{
+  const session=loadSession();
+  if(session){const users=loadUsers();const user=users.find(u=>u.email===session.email);if(user&&user.status==='approved'){currentUser=user;enterApp();}else{clearSession();}}
+  document.querySelectorAll('.upload-zone').forEach(zone=>{
+    zone.addEventListener('dragover',e=>{e.preventDefault();zone.classList.add('drag-over');});
+    zone.addEventListener('dragleave',()=>zone.classList.remove('drag-over'));
+    zone.addEventListener('drop',e=>{e.preventDefault();zone.classList.remove('drag-over');const file=e.dataTransfer.files[0];if(!file)return;const ni=zone.nextElementSibling;if(ni&&ni.type==='file'){const dt=new DataTransfer();dt.items.add(file);ni.files=dt.files;ni.dispatchEvent(new Event('change'));}});
   });
 });
 </script>
-<footer style="text-align:center;padding:16px;font-size:11px;color:var(--grey4);background:var(--white);border-top:1px solid var(--grey2);margin-left:var(--sidebar);">
-  State House Medical Centre · Pharmacy Bulk Store IMS v3 · Aso Rock Presidential Villa, Abuja · © 2026 · Confidential
-</footer>
 </body>
 </html>
